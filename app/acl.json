@@ -10,6 +10,16 @@
       "Register" : ["login", "register"]
     },
     "Register" : ["logout"],
-    "Contacts" : ["*"]
+    "Products" : ["*"]
+  },
+  "Elado" : {
+    "denied" : {},
+    "Admindashboard" : ["*"],
+    "Adminproduct" : ["*"]
+  },
+  "SuperAdmin" : {
+    "denied" : {},
+    "Admin" : ["*"],
+    "Products" : ["*"]
   }
 }

@@ -13,6 +13,16 @@
       return $html;
     }
 
+    public static function textareaBlock($label, $name, $value, $inputAttrs=[], $divAttrs=[]) {
+      $divString = self::stringifyAttrs($divAttrs);
+      $inputString = self::stringifyAttrs($inputAttrs);
+      $html = '<div'.$divString . '>';
+      $html .= '<label for="' . $name . '">'.$label.'</label>';
+      $html .= '<textarea id="'.$name.'" name="'.$name.'"'.$inputString.'>'.$value.'</textarea>';
+      $html .= '</div>';
+      return $html;
+    }
+
     public static function submitTag($buttonText, $inputAttrs=[], $divAttrs=[]) {
       $inputString = self::stringifyAttrs($inputAttrs);
       $html = '<input type="submit" value="'.$buttonText.'"'.$inputString.' />';

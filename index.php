@@ -10,7 +10,7 @@
   //load configuration and helper functions
   require_once(ROOT . DS . 'config' . DS . 'config.php');
 
-  function autoload($className) {
+  function semiautoload($className) {
     $classAry = explode('\\', $className);
     $class = array_pop($classAry);
     $subPath = strtolower(implode(DS, $classAry));
@@ -20,7 +20,7 @@
     }
   }
 
-  spl_autoload_register('autoload');
+  spl_autoload_register('semiautoload');
   session_start();
 
   $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : []; // minden amit a gyökeren kívül bírunk.
