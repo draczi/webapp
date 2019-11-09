@@ -5,12 +5,11 @@
   use Core\Cookie;
 
   class UserSessions extends Model {
+    public $id,$user_id,$session,$user_agent;
+    protected static $_table = 'users_sessions';
 
-public $id, $user_id, $session,$user_agent;
-
-    public function __construct() {
-      $table = 'users_sessions';
-      parent::__construct($table);
+    public function beforeSave(){
+      $this->timeStamps();
     }
 
     public static function getFromCookie() {

@@ -2,7 +2,7 @@
   use Core\Router;
   use Core\H;
   use App\Models\Users;
-  
+
   $menu = Router::getMenu('menu_acl');
   $currentPage = H::currentPage();
 ?>

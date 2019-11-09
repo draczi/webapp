@@ -12,23 +12,26 @@
       $this->_action = $action;
       $this->request = new Input();
       $this->view = new View();
+      $this->onConstruct();
     }
 
-    protected function load_model($model) {
-      $modelPath = 'App\Models\\' . $model;
-      if(class_exists($modelPath)) {
-        $this->{$model.'Model'} = new $modelPath;
-      }
+    /**
+     * Called when a Controller object is constructed
+     * @method onConstruct
+     */
+    public function onConstruct(){}
 
-    }
-
-    public function jsonResponse($resp) {
+    /**
+     * used to for a json response
+     * @method jsonResponse
+     * @param  array        $resp associative array that gets json encoded
+     */
+    public function jsonResponse($resp){
       header("Access-Control-Allow-Origin: *");
       header("Content-Type: application/json; charset=UTF-8");
       http_response_code(200);
       echo json_encode($resp);
       exit;
     }
-
 
   }

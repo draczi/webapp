@@ -12,10 +12,11 @@
     "Register" : ["logout"],
     "Products" : ["*"]
   },
-  "Elado" : {
+  "Admin" : {
     "denied" : {},
     "Admindashboard" : ["*"],
-    "Adminproduct" : ["*"]
+    "Adminproduct" : ["*"],
+    "Adminbrands" : ["*"]
   },
   "SuperAdmin" : {
     "denied" : {},

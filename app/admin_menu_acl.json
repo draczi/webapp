@@ -5,6 +5,7 @@
     "separator" : "",
     "Add Product" : "adminproduct/add"
   },
+  "Brands" : "adminbrands/index",
   "Login" : "register/login",
   "Logout" : "register/logout",
   "Visit Site" : "home"
