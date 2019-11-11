@@ -11,11 +11,12 @@ use Core\Validators\RequiredValidator;
 use Core\Validators\EmailValidator;
 use Core\Validators\MatchesValidator;
 use Core\Validators\UniqueValidator;
+use Core\H;
 
 class Users extends Model {
   protected static $_table='users', $_softDelete = true;
   public static $currentLoggedInUser = null;
-  public $id,$username,$email,$password,$fname,$lname,$acl,$deleted = 0,$confirm;
+  public $id,$username,$email,$password,$fname,$lname,$acl,$deleted = 0,$confirm, $belepes_at;
   const blackListedFormKeys = ['id','deleted'];
 
   public function validator(){
@@ -92,7 +93,8 @@ class Users extends Model {
 
   public function acls() {
     if(empty($this->acl)) return [];
-    return json_decode($this->acl, true);
+    $sql = $this->query("SELECT acls.user_level as acl FROM users JOIN acls ON acls.id = users.acl WHERE users.id =" .$this->id)->results();
+    return json_decode($sql[0]->acl, true);
   }
 
   public static function addAcl($user_id,$acl){
@@ -117,6 +119,14 @@ class Users extends Model {
       $user->acl = json_encode($acls);
       $user->save();
     }
+    return true;
+  }
+
+  public function belepesDate($user_id) {
+    $user = self::findById($user_id);
+    $date = date('Y-m-d H:i:s');
+    $user->belepes_at = $date;
+    $user->save();
     return true;
   }
 }

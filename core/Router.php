@@ -2,7 +2,7 @@
   namespace Core;
   use Core\Session;
   use App\Models\Users;
-  
+
 
   class Router {
 
@@ -61,8 +61,11 @@
 
       if(Session::exists(CURRENT_USER_SESSION_NAME)) {
         $current_user_acls[] = "LoggedIn";
-        foreach(Users::currentUser()->acls() as $a) {
-          $current_user_acls[] = $a;
+        // foreach(Users::currentUser()->acls() as $a) {
+        //   $current_user_acls[] = $a;
+        // }
+        if($user = Users::currentUser()->acls()) {
+          $current_user_acls[] = $user[0];
         }
       }
 

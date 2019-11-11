@@ -322,7 +322,6 @@ class Model {
    * @method timeStamps
    */
   public function timeStamps(){
-
     $now = date('Y-m-d H:i:s');
     $this->update_at = $now;
     if($this->isNew()){

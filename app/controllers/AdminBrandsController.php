@@ -23,7 +23,7 @@
     }
 
     public function saveAction(){
-      if($this->request->isPost()){
+      if($this->request->isPost()){ 
         $brand_id =   $this->request->get('brand_id');
         $brand = ($brand_id == 'new')? new Brands() : Brands::findFirst(['conditions' => 'id = ?', 'bind' => [$id]]);;
         $brand->name = $this->request->get('name');

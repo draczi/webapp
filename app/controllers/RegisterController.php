@@ -6,6 +6,7 @@ use App\Models\Users;
 use App\Models\Login;
 use Core\H;
 use Core\Session;
+use Core\Model;
 
 class RegisterController extends Controller {
 
@@ -23,6 +24,7 @@ class RegisterController extends Controller {
       if($loginModel->validationPassed()){
         $user = Users::findByUsername($_POST['username']);
         if($user && password_verify($this->request->get('password'), $user->password)) {
+          $user->belepesDate($user->id);
           $remember = $loginModel->getRememberMeChecked();
           $user->login($remember);
           Router::redirect('');

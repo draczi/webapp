@@ -8,8 +8,8 @@
   class HomeController extends Controller{
 
     public function indexAction() {
-     $pModel = new Products(); 
-     $products = $pModel->allProducts(); H::dnd($products);
+     $pModel = new Products();
+     $products = $pModel->allProducts();
      $this->view->products = $products;
      $this->view->render('home/index');
    }
