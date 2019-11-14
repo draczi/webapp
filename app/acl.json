@@ -3,6 +3,7 @@
     "denied" : {},
     "Home" : ["*"],
     "Register" : ["login", "register"],
+    "Products" : ["*"],
     "Restricted" : ["*"]
   },
   "LoggedIn" : {
@@ -12,11 +13,21 @@
     "Register" : ["logout"],
     "Products" : ["*"]
   },
+  "Seller" : {
+    "denied" : {
+      "Register" : ["login", "register"]
+    },
+    "Register" : ["logout"],
+    "Hirdeteskezeles" : ["*"]
+  },
   "Admin" : {
     "denied" : {},
     "Admindashboard" : ["*"],
     "Adminproduct" : ["*"],
-    "Adminbrands" : ["*"]
+    "Adminbrands" : ["*"],
+    "Hirdeteskezeles" : ["*"],
+    "Lezartarveresek" : ["*"]
+
   },
   "SuperAdmin" : {
     "denied" : {},

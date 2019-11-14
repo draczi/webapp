@@ -62,7 +62,7 @@
         $id = $this->request->get('id');
         $product = Products::findByIdAndUserId($id, $this->currentUser->id);
         if($product) {
-          ProductImages::deleteImages($id, true);
+        //  ProductImages::deleteImages($id, true);
           $product->delete();
           $resp = ['success' => true, 'msg' => 'Product Deleted.', 'model_id' => $id];
         }

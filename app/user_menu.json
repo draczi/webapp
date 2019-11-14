@@ -1,0 +1,7 @@
+{
+  "Bejelentkezés" : "register/login",
+  "Regisztráció" : "register/register",
+  "%USERNAME%" : {
+    "Logout" : "register/logout"
+  }
+}

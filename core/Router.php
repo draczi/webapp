@@ -65,7 +65,7 @@
         //   $current_user_acls[] = $a;
         // }
         if($user = Users::currentUser()->acls()) {
-          $current_user_acls[] = $user[0];
+          $current_user_acls[] = $user; 
         }
       }
 

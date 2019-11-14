@@ -10,6 +10,7 @@
   //load configuration and helper functions
   require_once(ROOT . DS . 'config' . DS . 'config.php');
 
+  //nevtér használathoz.
   function semiautoload($className) {
     $classAry = explode('\\', $className);
     $class = array_pop($classAry);
@@ -19,7 +20,6 @@
       require_once($path);
     }
   }
-
   spl_autoload_register('semiautoload');
   session_start();
 

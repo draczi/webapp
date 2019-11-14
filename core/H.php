@@ -47,7 +47,7 @@ class H {
         </li>
       <?php else:
         $active = ($val == $currentPage)? 'active':''; ?>
-        <li class="nav-item"><a class="nav-link <?=$active?>" href="<?=$val?>"><?=$key?></a></li>
+        <li class="nav-item" style="border-left: 1px solid #e7e7e7"><a class="nav-link <?=$active?>" href="<?=$val?>"><?=$key?></a></li>
       <?php endif; ?>
     <?php endforeach;
     return ob_get_clean();

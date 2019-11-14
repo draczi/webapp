@@ -3,11 +3,12 @@
   use Core\Model;
   use Core\Validators\{RequiredValidator,NumericValidator};
   use Core\H;
+  use Core\DB;
 
  class Products extends Model {
 
-   public $id, $created_at, $update_at, $name, $description,$body, $vendor, $brand_id,$featured = 0, $user_id;
-   public $list_price, $price, $shipping, $deleted= 0;
+   public $id, $created_at, $update_at, $name, $description, $vendor, $brand_id,$action_end, $quantity, $min_price;
+   public $list_price, $price, $bid_increment , $deleted= 0;
    const blackList = ['id','deleted'];
    protected static $_table = "products";
    protected static $_softDelete = true;
@@ -17,13 +18,13 @@
    }
 
    public function validator() {
-     $requiredFields = ['name' => "Name", 'price' => "Price", 'list_price' => "List Price", 'shipping' => "Shipping", 'body' => "Body"];
+     $requiredFields = ['name' => "Name", 'price' => "Price", 'min_price' => "Min Price", 'quantity' => "Mennyiség", 'description' => "Termékleírás"];
      foreach($requiredFields as $field => $display) {
        $this->runValidation(new RequiredValidator($this, ['field' => $field, 'msg' => $display." is required"]));
      }
      $this->runValidation(new NumericValidator($this, ['field' => 'price', 'msg' => 'Price must be a numeric']));
-     $this->runValidation(new NumericValidator($this, ['field' => 'list_price', 'msg' => 'List Price must be a numeric']));
-     $this->runValidation(new NumericValidator($this, ['field' => 'shipping', 'msg' => 'Shipping must be a numeric']));
+     $this->runValidation(new NumericValidator($this, ['field' => 'min_price', 'msg' => 'List Price must be a numeric']));
+     $this->runValidation(new NumericValidator($this, ['field' => 'quantity', 'msg' => 'Shipping must be a numeric']));
 
    }
 
@@ -37,6 +38,12 @@
      return self::find($params);
    }
 
+   public static function findByUserIdAndImages($user_id) {
+     $db = DB::getInstance();
+     $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND  products.vendor = " .$user_id;
+     return $db->query($sql)->results();
+   }
+
    public static function findByIdAndUserId($id, $user_id) {
      $conditions = [
        'conditions' => "id = ? AND user_id = ?",
@@ -45,17 +52,80 @@
      return self::findFirst($conditions);
    }
 
-   public function allProducts() {
-    $sql = "SELECT products.*, pi.url as url, brands.name as brand
-            FROM products
+   public static function allProducts($options) {
+    $db = DB::getInstance();
+    $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
+    $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
+    $where = "products.deleted = 0 AND pi.sort = '0'";
+    $binds = [];
+    if(array_key_exists('search',$options) && !empty($options['search'])) {
+      $where .= " AND (products.name LIKE ? OR brands.name LIKE ?)";
+      $binds[] = "%" . $options['search'] . "%";
+      $binds[] = "%" . $options['search'] . "%";
+    }
+    if(array_key_exists('max_price',$options) && !empty($options['max_price'])) {
+      $where .= " AND products.price <= ?";
+      $binds[] = $options['max_price'];
+    }
+    if(array_key_exists('min_price',$options) && !empty($options['min_price'])) {
+      $where .= " AND products.price >= ?";
+      $binds[] = $options['min_price'];
+    }
+
+    $select = "SELECT COUNT(*) as total";
+    $sql = " FROM products
             JOIN product_images as pi
             ON products.id = pi.product_id
             JOIN brands
             ON products.brand_id = brands.id
-            WHERE products.deleted = '0' and pi.sort = '0'
-            group by pi.product_id
+            WHERE {$where}
             ";
-    return  $this->query($sql)->results();
+    $total = $db->query($select . $sql, $binds)->first()->total;
+    $select = "SELECT products.*, pi.url as url, brands.name as brand";
+    $pager = " LIMIT ? OFFSET ?";
+    $binds[] = $limit;
+    $binds[] = $offset;
+    $results = $db->query($select . $sql . $pager, $binds)->results();
+    return ['results' => $results, 'total' => $total];
+  }
+
+  public static function auctionEndSold($user_id) {
+    $db = DB::getInstance();
+    $now = date('Y-m-d H:i:s');
+    $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 1 AND  '.$now.' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
+    return $db->query($sql)->results(); H::dnd($sql);
+  }
+
+  public static function auctionEndNotSold($user_id) {
+    $db = DB::getInstance();
+    $now = date('Y-m-d H:i:s');
+    $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 0 AND '$now' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
+    return $db->query($sql)->results();
+  }
+
+
+
+  public function getBrandName() {
+    $brand = Brands::findFirst([
+      'conditions' => "id = ?",
+      'bind' => [$this->brand_id]
+    ]);
+    return ($brand) ? $brand->name : '';
+  }
+
+  public static function hasFilters($options){
+        foreach($options as $key => $value){
+          if(!empty($value) && $key != 'limit' && $key != 'offset') return true;
+        }
+        return false;
+      }
+
+  public function getImages() {
+    return ProductImages::find([
+      'conditions' => "product_id = ?" ,
+      'bind' => [$this->id],
+      'order' => 'sort'
+    ]);
   }
 
 

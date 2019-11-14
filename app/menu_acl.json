@@ -1,6 +1,10 @@
 {
-  "Home" : "home",
-  "Login" : "register/login",
-  "Logout" : "register/logout",
-  "Admin" : "Admindashboard/index"
+  "Hirdetéskezelés" : {
+    "Hirdetések" : "hirdeteskezeles/index",
+    "separator" : "",
+    "Hirdetésfeladás" : "hirdeteskezeles/add",
+    "Lezártárverések" : "hirdeteskezeles/lezartarveresek"
+
+ },
+  "Admin" : "admindashboard/index"
 }

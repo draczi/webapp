@@ -60,11 +60,11 @@ class Users extends Model {
       $user_agent = Session::uagent_no_version();
       Cookie::set(REMEMBER_ME_COOKIE_NAME, $hash, REMEMBER_ME_COOKIE_EXPIRY);
       $fields = ['session'=>$hash, 'user_agent'=>$user_agent, 'user_id'=>$this->id];
-      self::$_db->query("DELETE FROM user_sessions WHERE user_id = ? AND user_agent = ?", [$this->id, $user_agent]);
+      self::$_db->query("DELETE FROM users_sessions WHERE user_id = ? AND user_agent = ?", [$this->id, $user_agent]);
       $us = new UserSessions();
-      $us->assign($fields);
-      $us->save();
-      // self::$_db->insert('user_sessions', $fields);
+      $us->assign($fields);//H::dnd($us);
+      $us->save(); H::dnd($us);
+      //self::$_db->insert('user_sessions', $fields);
     }
   }
 
@@ -93,8 +93,8 @@ class Users extends Model {
 
   public function acls() {
     if(empty($this->acl)) return [];
-    $sql = $this->query("SELECT acls.user_level as acl FROM users JOIN acls ON acls.id = users.acl WHERE users.id =" .$this->id)->results();
-    return json_decode($sql[0]->acl, true);
+    $sql = $this->query("SELECT acls.user_level as acl FROM users JOIN acls ON acls.id = users.acl WHERE users.id =" .$this->id)->results(); // H::dnd($sql[0]->acl);
+    return $sql[0]->acl;
   }
 
   public static function addAcl($user_id,$acl){
