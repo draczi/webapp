@@ -1,24 +1,20 @@
 <?php
   namespace App\Controllers;
   use Core\Controller;
+  use Core\H;
+  use Core\Router;
+  use Core\Session;
   use App\Models\Users;
   use App\Models\Products;
+  use App\Models\Bids;
 
-  class BidsController extends Controller {
+  class BidsController extends Controller{
+
     public function onConstruct() {
       $this->view->setLayout('default');
       $this->currentUser = Users::currentUser();
     }
 
-    public function detailsAction() {
-      $product = new bids();
-      if($this->request->isPost()) {
-        $a = 'hello';
-      }H::dnd($a);
 
-      $this->view->formAction = PROOT . 'products/details';
-      //$this->view->displayErrors = $product->getErrorMessages();
-      $this->view->render('hirdeteskezeles/add');
-    }
 
 }

@@ -2,6 +2,7 @@
   namespace Core;
   use Core\Session;
   use App\Models\Users;
+  use Core\H;
 
 
   class Router {
@@ -29,9 +30,8 @@
 
       //params
       $queryParams = $url;
-      $controller = 'App\Controllers\\' . $controller;
+      $controller = (substr($controller, 0, 5) == 'Admin')? 'App\Controllers\Admin\\' . $controller : 'App\Controllers\\' . $controller;
       $dispatch = new $controller($controller_name, $action);
-
       if(method_exists($controller, $action)) {
         call_user_func_array([$dispatch, $action], $queryParams);
       } else {
@@ -65,7 +65,7 @@
         //   $current_user_acls[] = $a;
         // }
         if($user = Users::currentUser()->acls()) {
-          $current_user_acls[] = $user; 
+          $current_user_acls[] = $user;
         }
       }
 

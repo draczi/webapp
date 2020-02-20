@@ -59,4 +59,13 @@ class RegisterController extends Controller {
     $this->view->displayErrors = $newUser->getErrorMessages();
     $this->view->render('register/register');
   }
+
+  public function contactAction() {
+    $user = Users::currentUser();
+
+
+
+    //$this->view->displayErrors = $newUser->getErrorMessages();
+    $this->view->render('register/login');
+  }
 }

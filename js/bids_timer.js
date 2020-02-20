@@ -8,6 +8,8 @@ return "<b>" + s + "</b>";
 
 function CountBack(secs) {
 if (secs < 0) {
+    $('#bids').hide();
+    $('.lezarult').show();
 document.getElementById("cntdwn").innerHTML = FinishMessage;
 
 return;
@@ -24,6 +26,7 @@ setTimeout("CountBack(" + (secs+CountStepper) + ")", SetTimeOutPeriod);
 
 function putspan(backcolor, forecolor) {
 document.write("(<span id='cntdwn' style='color: #000; font-weight: 100; font-size: 12px '></span>)");
+
 }
 
 
@@ -40,3 +43,4 @@ else
 ddiff = new Date(dthen-dnow);
 gsecs = Math.floor(ddiff.valueOf()/1000);
 CountBack(gsecs);
+TargetDate

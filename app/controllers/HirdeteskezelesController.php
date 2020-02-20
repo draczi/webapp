@@ -7,9 +7,9 @@
   use App\Models\Users;
   use App\Models\Products;
   use App\Models\ProductImages;
-  use App\Models\Brands;
+  use App\Models\Categories;
 
-  class HirdeteskezelesController extends Controller{
+  class HirdeteskezelesController extends Controller {
     public function onConstruct() {
       $this->view->setLayout('default');
       $this->currentUser = Users::currentUser();
@@ -30,6 +30,7 @@
     public function addAction() {
       $product = new Products();
       $productImage = new ProductImages();
+      $auction_time = array('7' => '1 hét', '14' => '2 hét', '21' => '3 hét');
       if($this->request->isPost()) {
         $files = $_FILES['productImages'];
         $imagesErrors = $productImage->validateImages($files);
@@ -40,7 +41,7 @@
           }
           $product->addErrorMessage('productImages', trim($msg));
         }
-        $this->request->csrfCheck();
+        $this->request->csrfCheck();//H::dnd($this->request->get());
         $product->assign($this->request->get(), Products::blackList);
         $product->vendor = $this->currentUser->id;
         $product->save();
@@ -52,9 +53,10 @@
           Router::redirect('hirdeteskezeles');
         }
       }
-      $this->view->brands = Brands::getBradsForForm();;
+      $this->view->categories = Categories::getOptionForForm();
       $this->view->product = $product;
       $this->view->formAction = PROOT . 'hirdeteskezeles/add';
+      $this->view->auction_time = $auction_time;
       $this->view->displayErrors = $product->getErrorMessages();
       $this->view->render('hirdeteskezeles/add');
     }
@@ -66,6 +68,7 @@
         Session::addMsg('danger', 'You not have permission to edit that product');
         Router::redirect('hirdeteskezeles');
       }
+      $auction_time = array('7' => '1 hét', '14' => '2 hét', '21' => '3 hét');
       $images = ProductImages::findByProductId($product->id);//H::dnd($images);
       if($this->request->isPost()) {
         $this->request->csrfCheck();
@@ -95,9 +98,10 @@
           Router::redirect('hirdeteskezeles');
         }
       }
-      $this->view->brands = Brands::getBradsForForm();;
+      $this->view->categories = Categories::getOptionForForm();
       $this->view->images = $images;
       $this->view->product = $product;
+      $this->view->auction_time = $auction_time;
       $this->view->displayErrors = $product->getErrorMessages();
       $this->view->render('hirdeteskezeles/edit');
     }

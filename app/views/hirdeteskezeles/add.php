@@ -12,7 +12,7 @@
 <hr/>
 <div class="row">
   <div class="product-form col-md-10 ">
-    <?php $this->partial('hirdeteskezeles', 'form') ?>
+  <?php $this->partial('hirdeteskezeles', 'form') ?>
   </div>
 </div>
 <?php $this->end() ?>

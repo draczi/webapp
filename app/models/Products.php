@@ -7,7 +7,7 @@
 
  class Products extends Model {
 
-   public $id, $created_at, $update_at, $name, $description, $vendor, $brand_id,$action_end, $quantity, $min_price;
+   public $id, $created_at, $update_at, $name, $description, $vendor, $category, $action_end, $quantity, $min_price, $auction_time;
    public $list_price, $price, $bid_increment , $deleted= 0;
    const blackList = ['id','deleted'];
    protected static $_table = "products";
@@ -30,7 +30,7 @@
 
    public static function findByUserId($user_id, $params=[]) {
      $conditions = [
-       'conditions' => "user_id = ?",
+       'conditions' => "vendor = ?",
        'bind' => [(int)$user_id],
        'order' => 'name'
      ];
@@ -46,7 +46,7 @@
 
    public static function findByIdAndUserId($id, $user_id) {
      $conditions = [
-       'conditions' => "id = ? AND user_id = ?",
+       'conditions' => "id = ? AND vendor = ?",
        'bind' => [(int)$id, (int)$user_id]
      ];
      return self::findFirst($conditions);
@@ -59,7 +59,7 @@
     $where = "products.deleted = 0 AND pi.sort = '0'";
     $binds = [];
     if(array_key_exists('search',$options) && !empty($options['search'])) {
-      $where .= " AND (products.name LIKE ? OR brands.name LIKE ?)";
+      $where .= " AND (products.name LIKE ? OR categories.category_name LIKE ?)";
       $binds[] = "%" . $options['search'] . "%";
       $binds[] = "%" . $options['search'] . "%";
     }
@@ -71,17 +71,21 @@
       $where .= " AND products.price >= ?";
       $binds[] = $options['min_price'];
     }
+    if(array_key_exists('category',$options) && !empty($options['category'])) {
+      $where .= " AND products.category = ?";
+      $binds[] = $options['category'];
+    }
 
     $select = "SELECT COUNT(*) as total";
     $sql = " FROM products
             JOIN product_images as pi
             ON products.id = pi.product_id
-            JOIN brands
-            ON products.brand_id = brands.id
+            JOIN categories
+            ON products.category = categories.id
             WHERE {$where}
             ";
     $total = $db->query($select . $sql, $binds)->first()->total;
-    $select = "SELECT products.*, pi.url as url, brands.name as brand";
+    $select = "SELECT products.*, pi.url as url, categories.category_name as category";
     $pager = " LIMIT ? OFFSET ?";
     $binds[] = $limit;
     $binds[] = $offset;
@@ -93,7 +97,7 @@
     $db = DB::getInstance();
     $now = date('Y-m-d H:i:s');
     $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 1 AND  '.$now.' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
-    return $db->query($sql)->results(); H::dnd($sql);
+    return $db->query($sql)->results();
   }
 
   public static function auctionEndNotSold($user_id) {
@@ -101,16 +105,6 @@
     $now = date('Y-m-d H:i:s');
     $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 0 AND '$now' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
     return $db->query($sql)->results();
-  }
-
-
-
-  public function getBrandName() {
-    $brand = Brands::findFirst([
-      'conditions' => "id = ?",
-      'bind' => [$this->brand_id]
-    ]);
-    return ($brand) ? $brand->name : '';
   }
 
   public static function hasFilters($options){

@@ -24,9 +24,11 @@
     "denied" : {},
     "Admindashboard" : ["*"],
     "Adminproduct" : ["*"],
+    "AdminCategories" : ["*"],
     "Adminbrands" : ["*"],
     "Hirdeteskezeles" : ["*"],
-    "Lezartarveresek" : ["*"]
+    "Lezartarveresek" : ["*"],
+    "Contact" : ["*"]
 
   },
   "SuperAdmin" : {

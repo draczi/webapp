@@ -2,7 +2,9 @@
 
   define('DEBUG', true);
 
-  define('DB_NAME', 'live'); // database name
+  define('RUN_MIGRATIONS_FROM_BROWSER', false);
+
+  define('DB_NAME', 'auction'); // database name
   define('DB_USER', 'root'); // database user
   define('DB_PASSWORD', ''); // database password
   define('DB_HOST', '127.0.0.1'); // database elerhetősége

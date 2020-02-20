@@ -1,4 +1,5 @@
-<form action="<?=$this->formAction?>" method="POST">
+<?php use Core\FH; ?>
+<form action="" method="POST">
   <div class="input-group">
     <label class="sr-only" for="bid">Licit</label>
     <input class="form-control" id="bids" name="bids" value="" placeholder="Licit összeg" />

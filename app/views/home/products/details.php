@@ -1,8 +1,10 @@
-<?php use Core\FH; use Core\H; //H::dnd($this->product);?>
+<?php use Core\FH; use Core\H; use App\Controllers\ProductsController; use Core\DB;
+print_r($this->product);
+?>
 <?php $this->setSiteTitle($this->product->name); ?>
 <?php $this->start('body'); ?>
 <div class="details-container">
-  <h1>NEVE a terméknek</h1>
+  <h1><?=$this->product->name?></h1>
   <div class="row">
     <div class="col-md-6">
       <!-- slideshow -->
@@ -34,35 +36,43 @@
       </div>
     <!-- slideshow vege -->
       <div class="vendor-info col-md-12">
-        <p>Eladó adatai</p>
-        <p>Horváth Pista</p>
+        <p><b>Eladó adatai</b></p>
+        <p>Felhasználó neve: <span><?= $this->vendor['vendor'] ?></span></p>
         <p>Regisztráció időpontja: <span>2010-10-10</span></p>
-        <p>Utolsó belépés: <span></span></p>
+        <p>Utolsó belépés: <span><?=$this->vendor['login_date']?></span></p>
 
       </div>
     </div>
     <div class="details-box col-md-6">
       <div class="licit-box col-md-12">
-        <div class="actual-price"><img src="<?=PROOT?>images/licit-hammer-icon.jpg" /><p>Jelenlegi ár: <span><?=$this->product->price ?></span> Ft</p></div>
+        <div class="actual-price"><img src="<?=PROOT?>images/licit-hammer-icon.jpg" /><p>Jelenlegi ár: <span><?= (!empty($this->bid)) ? $this->bid['bid'] : $this->product->price ?></span> Ft</p></div>
         <p class="min_price">Nincs minimál ár meghatározva</p>
-        <p class="bid-increment">Licitlépcső: <span class="licit">500 Ft</span> <span class="min_licit_price">(Min. 5000 Ft)</span></p>
-          <?php $this->partial('bids', 'form') ?>
+        <p class="bid-increment">Licitlépcső: <span class="licit"><?=$this->product->bid_increment ?></span> <span class="min_licit_price">( Minimum ajánlat:  <?= (empty($this->bid)) ? ($this->product->price + $this->product->bid_increment)  : ($this->bid['bid'] + $this->product->bid_increment) ?>  Ft  )</span></p>
+    <div>
+        <div id="bids">
+      <?php  ($this->user) ? $this->partial('home/products', 'form') :   print('<p style="color: #17a2b8; margin-top: 20px">A licitáláshoz kérlek jelentkezz be!</p>') ; ?>
+
+  </div>
+  <div class="lezarult" style="display:none"><b>AZ ÁRVERÉS BEFEJEZŐDÖTT!</b></div>
+  </div>
       </div>
       <div class="product-info-box col-md-12">
         <div class="row">
           <div class="col-md-5">
+            <p>Aukció kezdete</p>
             <p>Mennyiség</p>
             <p>Áru helye</p>
             <p>Aukció vége</p>
-            <p>Aukció kezdete</p>
             <p>Jelenlegi nyertes</p>
             <p>Kikiáltási ár</p>
           </div>
           <div class="col-md-7">
-            <p>Mennyiség</p>
+            <p><?= $this->product->created_at ?></p>
+            <p><?=$this->product->quantity ?></p>
             <p>Áru helye</p>
             <p> <?= date_format(date_create($this->product->auction_end), "Y-m-d"); ?>
               <script>
+                Product = "<?= $this->product->id ?>";
                 TargetDate = "<?= $this->product->auction_end ?>";
                 BackColor = "";
                 ForeColor = "navy";
@@ -70,13 +80,12 @@
                 CountStepper = -1;
                 LeadingZero = true;
                 DisplayFormat = "%%D%% Nap, %%H%% Óra, %%M%% Perc";
-                FinishMessage = "Bidding closed!";
+                FinishMessage = "Aukció lezárva "  ;
               </script>
               <script src="<?=PROOT?>js/bids_timer.js"></script>
             </p>
-            <p>Aukció kezdete</p>
-            <p>Jelenlegi nyertes</p>
-            <p>Kikiáltási ár</p>
+            <p><?=$this->bid['bid_user'] ?></p>
+            <p><?=sprintf("%d", $this->product->price)?> Ft</p>
           </div>
         </div>
       </div>
@@ -84,11 +93,12 @@
   <div class="description col-12 col-md-11">
       <h3>Termékleírás</h3>
       <div class="desc">
-        bababababab
+        <?= $this->product->description ?>
       </div>
   </div>
   </div>
 </div>
+
 
 
  <?php $this->end(); ?>

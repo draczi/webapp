@@ -1,12 +1,10 @@
 {
-  "Dasboard" : "admindashboard/index",
-  "Products" : {
-    "View Products" : "adminproduct/index",
+  "Termékek" : {
+    "Termék megjelenítés" : "adminproduct/index",
     "separator" : "",
-    "Add Product" : "adminproduct/add"
+    "Új Termék" : "adminproduct/add"
   },
-  "Brands" : "adminbrands/index",
-  "Login" : "register/login",
-  "Logout" : "register/logout",
-  "Visit Site" : "home"
+  "Kategória" : "adminCategories/index",
+  "Bejelentkezés" : "register/login",
+  "Kijelentkezés" : "register/logout"
 }

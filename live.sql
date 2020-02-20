@@ -164,14 +164,14 @@ CREATE TABLE `users` (
   `lname` varchar(150) COLLATE utf8_hungarian_ci NOT NULL,
   `acl` text COLLATE utf8_hungarian_ci DEFAULT NULL,
   `deleted` tinyint(4) DEFAULT 0,
-  `belepes_at` datetime DEFAULT NULL
+  `login_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `fname`, `lname`, `acl`, `deleted`, `belepes_at`) VALUES
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `fname`, `lname`, `acl`, `deleted`, `login_date`) VALUES
 (1, 'draczi', 'istvan.dracz@gmail.com', '$2y$10$cLwJqj/naZ2oFb5px.EwLuh0JHhWPbTRo.eFERgZg/GLGS/5Z6o4O', 'Istvan', 'Dracz', '[\"Admin\"]', 0, '2019-11-10 23:08:20'),
 (9, 'kovacs', 'balats@gmail.com', '$2y$10$BbwdhtCO.lQrTZJqSQ5Rl.Gqw//n9aIdHy0ZHh9/a2kf3RcnP5h.i', 'Istvan', 'Kovacs', '1', 0, '2019-11-10 23:34:06');
 

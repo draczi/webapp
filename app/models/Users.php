@@ -16,7 +16,7 @@ use Core\H;
 class Users extends Model {
   protected static $_table='users', $_softDelete = true;
   public static $currentLoggedInUser = null;
-  public $id,$username,$email,$password,$fname,$lname,$acl,$deleted = 0,$confirm, $belepes_at;
+  public $id,$username,$email,$password,$fname,$lname,$acl,$deleted = 0,$confirm, $login_date;
   const blackListedFormKeys = ['id','deleted'];
 
   public function validator(){
@@ -62,8 +62,8 @@ class Users extends Model {
       $fields = ['session'=>$hash, 'user_agent'=>$user_agent, 'user_id'=>$this->id];
       self::$_db->query("DELETE FROM users_sessions WHERE user_id = ? AND user_agent = ?", [$this->id, $user_agent]);
       $us = new UserSessions();
-      $us->assign($fields);//H::dnd($us);
-      $us->save(); H::dnd($us);
+      $us->assign($fields);
+      $us->save();
       //self::$_db->insert('user_sessions', $fields);
     }
   }
@@ -93,7 +93,7 @@ class Users extends Model {
 
   public function acls() {
     if(empty($this->acl)) return [];
-    $sql = $this->query("SELECT acls.user_level as acl FROM users JOIN acls ON acls.id = users.acl WHERE users.id =" .$this->id)->results(); // H::dnd($sql[0]->acl);
+    $sql = $this->query("SELECT acls.user_level as acl FROM users JOIN acls ON acls.id = users.acl WHERE users.id =" .$this->id)->results();
     return $sql[0]->acl;
   }
 
@@ -125,8 +125,16 @@ class Users extends Model {
   public function belepesDate($user_id) {
     $user = self::findById($user_id);
     $date = date('Y-m-d H:i:s');
-    $user->belepes_at = $date;
+    $user->login_date = $date;
     $user->save();
     return true;
+  }
+
+  public static function findUserName($user_id) {
+    return self::findFirst([
+      'column' => 'username',
+      'conditions' => 'id = ?',
+      'bind' => [$user_id]
+    ]);
   }
 }
