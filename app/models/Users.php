@@ -5,18 +5,20 @@ use App\Models\Users;
 use App\Models\UserSessions;
 use Core\Cookie;
 use Core\Session;
+use Core\DB;
 use Core\Validators\MinValidator;
 use Core\Validators\MaxValidator;
 use Core\Validators\RequiredValidator;
 use Core\Validators\EmailValidator;
 use Core\Validators\MatchesValidator;
 use Core\Validators\UniqueValidator;
+use App\Controllers\Admin\AdminUsersController;
 use Core\H;
 
 class Users extends Model {
   protected static $_table='users', $_softDelete = true;
   public static $currentLoggedInUser = null;
-  public $id,$username,$email,$password,$fname,$lname,$acl,$deleted = 0,$confirm, $login_date;
+  public $id,$username,$email,$password,$fname,$lname,$acl,$deleted = 0,$confirm, $login_date, $create_date;
   const blackListedFormKeys = ['id','deleted'];
 
   public function validator(){
@@ -137,4 +139,53 @@ class Users extends Model {
       'bind' => [$user_id]
     ]);
   }
+
+  public static function getOptionForForm($new=false) {
+    $db = DB::getInstance();
+    $acls = $db->query("SELECT id, user_level FROM acls")->results();
+    $aclsAry = ['0' =>' Összes'];
+    if ($new==true) $aclsAry = [];
+    foreach($acls as $acl) {
+      $aclsAry[$acl->id] = AdminUsersController::szotar($acl->user_level);
+    }
+    return $aclsAry;
+  }
+  public static function allUsers($options) {
+   $db = DB::getInstance();
+   $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
+   $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
+   $where = "users.deleted = 0";
+   $binds = [];
+   if(array_key_exists('search',$options) && !empty($options['search'])) {
+     $where .= " AND (users.username LIKE ? OR users.fname LIKE ? OR users.lname LIKE ?)";
+     $binds[] = "%" . $options['search'] . "%";
+     $binds[] = "%" . $options['search'] . "%";
+     $binds[] = "%" . $options['search'] . "%";
+   }
+   if(array_key_exists('acl',$options) && !empty($options['acl'])) {
+     $where .= " AND users.acl = ?";
+     $binds[] = $options['acl'];
+   }
+
+   $select = "SELECT COUNT(*) as total";
+   $sql = " FROM users
+           JOIN acls
+           ON users.acl = acls.id
+           WHERE {$where}
+           ";
+   $total = $db->query($select . $sql, $binds)->first()->total;
+   $select = "SELECT users.*, acls.user_level as acl";
+   $pager = " LIMIT ? OFFSET ?";
+   $binds[] = $limit;
+   $binds[] = $offset;
+   $results = $db->query($select . $sql . $pager, $binds)->results();
+   return ['results' => $results, 'total' => $total];
+ }
+
+ public static function hasFilters($options){
+       foreach($options as $key => $value){
+         if(!empty($value) && $key != 'limit' && $key != 'offset') return true;
+       }
+       return false;
+     }
 }

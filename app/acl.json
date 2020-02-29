@@ -28,7 +28,7 @@
     "Adminbrands" : ["*"],
     "Hirdeteskezeles" : ["*"],
     "Lezartarveresek" : ["*"],
-    "Contact" : ["*"]
+    "AdminUsers" : ["*"]
 
   },
   "SuperAdmin" : {

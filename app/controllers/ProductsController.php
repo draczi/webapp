@@ -40,36 +40,6 @@
 
   }
 
-  public function addAction() {
-
-    $bid = new Bids();
-    $db = DB::getInstance();
-    if($this->request->isPost()) {
-      $bid->assign($this->request->get());
-      $lastLicit = Bids::findProductBind($bid->product_id);
-      if (!$lastLicitUser = Bids::findProductAndUserBind($bid->product_id, $bid->user_id)) {
-        $bid->save();
-        $errorM = $bid->getErrorMessages();
-        if($bid->validationPassed()) {
-          if($lastLicit) $db->query("UPDATE bids SET deleted = 1 WHERE id = ".$lastLicit->id);
-          Session::addMsg('success', 'Gratulálunk, sikeresen licitált a termékre.');
-
-        } else {
-          foreach($errorM as $error => $val) {
-            Session::addMsg('danger',  $val);
-          }
-
-        }
-      } else {
-        Session::addMsg('danger', "Korábban már licitált, Ön vezeti a licitet.");
-      }
-        Router::redirect('products/details/'.$bid->product_id);
-
-     H::dnd($bid->getErrorMessages());
-
-    }
-  }
-
   public static function closeBidsAction($product_id) {
     $db = DB::getInstance();
     return $db->query("UPDATE products SET deleted = 1 WHERE id= " .$product_id );

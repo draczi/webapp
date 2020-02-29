@@ -55,6 +55,7 @@ class RegisterController extends Controller {
         Router::redirect('register/login');
       }
     }
+    $this->view->formAction = PROOT . 'adminproduct/add';
     $this->view->newUser = $newUser;
     $this->view->displayErrors = $newUser->getErrorMessages();
     $this->view->render('register/register');

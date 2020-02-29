@@ -5,6 +5,7 @@
     "Új Termék" : "adminproduct/add"
   },
   "Kategória" : "adminCategories/index",
+  "Felhasználók" : "adminUsers/index",
   "Bejelentkezés" : "register/login",
   "Kijelentkezés" : "register/logout"
 }

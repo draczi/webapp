@@ -33,8 +33,8 @@ print_r($this->product);
         <span class="carousel-control-next-icon" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
         <span class="sr-only">Next</span>
       </a>
-      </div>
-    <!-- slideshow vege -->
+      </div><!-- slideshow vege -->
+
       <div class="vendor-info col-md-12">
         <p><b>Eladó adatai</b></p>
         <p>Felhasználó neve: <span><?= $this->vendor['vendor'] ?></span></p>
@@ -50,7 +50,7 @@ print_r($this->product);
         <p class="bid-increment">Licitlépcső: <span class="licit"><?=$this->product->bid_increment ?></span> <span class="min_licit_price">( Minimum ajánlat:  <?= (empty($this->bid)) ? ($this->product->price + $this->product->bid_increment)  : ($this->bid['bid'] + $this->product->bid_increment) ?>  Ft  )</span></p>
     <div>
         <div id="bids">
-      <?php  ($this->user) ? $this->partial('home/products', 'form') :   print('<p style="color: #17a2b8; margin-top: 20px">A licitáláshoz kérlek jelentkezz be!</p>') ; ?>
+      <?php  ($this->user) ? $this->partial('bids', 'form') :   print('<p style="color: #17a2b8; margin-top: 20px">A licitáláshoz kérlek jelentkezz be!</p>') ; ?>
 
   </div>
   <div class="lezarult" style="display:none"><b>AZ ÁRVERÉS BEFEJEZŐDÖTT!</b></div>

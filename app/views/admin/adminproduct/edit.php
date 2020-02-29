@@ -2,7 +2,7 @@
 use Core\FH;
 use Core\View;
 ?>
-<?php $this->setSiteTitle($this->product->name . 'szerkesztése') ?>
+<?php $this->setSiteTitle($this->product->name . ' szerkesztése') ?>
 <?php $this->start('head')?>
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>

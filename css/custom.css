@@ -76,7 +76,7 @@ a.nav-link {
 }
 .card-body .price {
   text-align: center;
-  margin-bottom: 30px;  
+  margin-bottom: 30px;
 }
 .card-body {
   margin-bottom: 20px;
@@ -239,6 +239,32 @@ ul.nav-tabs.search li a {
   text-decoration: none;
   color: #17a2b8;
 
+}
+
+.admin_search,
+.users_add {
+    border: 2px solid #17a2b8;
+    color: #17a2b8;
+    background: #fff;
+    margin-top: 28px;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+input.admin_search:hover,
+.users_add:hover {
+    background: #17a2b8;
+    color: #fff;
+    border: none;
+
+}
+
+h4.user_adatok {
+    margin-bottom: 50px;
+    margin-left: 15px;
 }
 
 footer {
