@@ -1,5 +1,8 @@
-<?php use Core\FH; use Core\H; use App\Controllers\ProductsController; use Core\DB;
-print_r($this->product);
+<?php
+    use Core\FH;
+    use Core\H;
+    use App\Controllers\ProductsController;
+    use Core\DB;
 ?>
 <?php $this->setSiteTitle($this->product->name); ?>
 <?php $this->start('body'); ?>
@@ -84,7 +87,7 @@ print_r($this->product);
               </script>
               <script src="<?=PROOT?>js/bids_timer.js"></script>
             </p>
-            <p><?=$this->bid['bid_user'] ?></p>
+            <p><?= (!empty($this->bid)) ? $this->bid['bid_user'] : 'Még nem történt licitálás.' ?></p>
             <p><?=sprintf("%d", $this->product->price)?> Ft</p>
           </div>
         </div>
