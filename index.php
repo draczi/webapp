@@ -3,7 +3,7 @@
   use Core\Cookie;
   use Core\Router;
   use Core\DB;
-  use App\Model\Users;
+  use App\Models\Users;
   define('DS', DIRECTORY_SEPARATOR); //per jelet helyettesiti
   define('ROOT', dirname(__FILE__)); // documentum gyökérkönyvtára
 
