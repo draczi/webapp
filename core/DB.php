@@ -13,8 +13,6 @@ class DB {
       $this->_pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'set character set UTF8'));
       $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $this->_pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-
     } catch(PDOException $e) {
       die($e->getMessage());
     }
@@ -37,19 +35,20 @@ class DB {
         }
       }
       if($this->_query->execute()) {
-        if($class){
-          $this->_result = $this->_query->fetchAll(PDO::FETCH_CLASS,$class);
-        } else {
-          $this->_result = $this->_query->fetchALL(PDO::FETCH_OBJ);
-        }
-        $this->_count = $this->_query->rowCount();
-        $this->_lastInsertID = $this->_pdo->lastInsertId();
-      } else {
-        $this->_error = true;
-      }
-    }
-    return $this;
-  }
+         if($class && $this->_fetchStyle === PDO::FETCH_CLASS){
+           $this->_result = $this->_query->fetchAll($this->_fetchStyle,$class);
+         } else {
+           $this->_result = $this->_query->fetchAll($this->_fetchStyle);
+         }
+         $this->_count = $this->_query->rowCount();
+         $this->_lastInsertID = $this->_pdo->lastInsertId();
+       } else {
+         $this->_error = true;
+       }
+     }
+     return $this;
+   }
+
 
   protected function _read($table, $params=[],$class) {
     $columns = '*';

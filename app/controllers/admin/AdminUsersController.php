@@ -54,14 +54,14 @@
 
     public function addAction() {
         $newUser = new Users();
+        $newContact = new Contacts();
         if($this->request->isPost()) {
-
           $this->request->csrfCheck();
           $newUser->assign($this->request->get(),Users::blackListedFormKeys);
           $newUser->confirm =$this->request->get('confirm');
           if($newUser->save()){
               if($this->request->get('address') != '' || $this->request->get('city') != '' || $this->request->get('country') != '' || $this->request->get('phone') != '' || $this->request->get('mobile_phone') != '' || $this->request->get('ostermelo_id') != '' || $this->request->get('adoszam') != '' || $this->request->get('zip_code') != '') {
-                $newContact = new Contacts();
+
                 $newContact -> assign($this->request->get());
                 $newContact->user_id = Model::getDb()->lastID();
                 $newContact->save();
@@ -74,6 +74,7 @@
         $this->view->acl = $acl;
         $this->view->formAction = PROOT . 'adminUsers/add';
         $this->view->newUser = $newUser;
+        $this->view->newContact = $newContact;
         $this->view->displayErrors = $newUser->getErrorMessages();
         $this->view->render('admin/adminUsers/add');
     }
@@ -94,41 +95,29 @@
 
     public function editAction($id) {
      $user = Users::findById($id);
-     //$contact = Contacts::findByUserId($id);
-      if($this->request->isPost()) {
-        $this->request->csrfCheck();
-        $files = $_FILES['productImages'];
-        $isFiles = $files['tmp_name'][0] != '';
-        if($isFiles) {
-          $productImage = new ProductImages();
-          $imagesErrors = $productImage->validateImages($files);
-          if(is_array($imagesErrors)) {
-            $msg = "";
-            foreach($imagesErrors as $name => $message) {
-              $msg .= $message . " ";
-            }
-            $product->addErrorMessage('productImages', trim($msg));
-          }
-        }
-        $product->assign($this->request->get(), Products::blackList);
-        $product->user_id = $this->currentUser->id;
-        $product->save();
-        if($product->validationPassed()) {
-          if($isFiles) {
-            $structuredFiles = ProductImages::restructureFiles($files);
-            ProductImages::uploadProductImage($product->id,$structuredFiles);
-          }
-          ProductImages::updateSortByProductId($product->id, json_decode($_POST['images_sorted']));
-          Session::addMsg('success', 'Product Edited');
-          Router::redirect('adminproduct');
-        }
-      }
+     $contact = Contacts::findByUserId($id);
+     if (empty($contact)) {
+         $contact = new Contacts();
+     }
+     if($this->request->isPost()) {
+       $this->request->csrfCheck();
+       $user->assign($this->request->get(),Users::blackListedFormKeys);
+       $user->confirm =$this->request->get('confirm');
+       if($user->save()){
+           if($this->request->get('address') != '' || $this->request->get('city') != '' || $this->request->get('country') != '' || $this->request->get('phone') != '' || $this->request->get('mobile_phone') != '' || $this->request->get('ostermelo_id') != '' || $this->request->get('adoszam') != '' || $this->request->get('zip_code') != '') {
+
+             $newContact -> assign($this->request->get());
+             $newContact->user_id = Model::getDb()->lastID();
+             $newContact->save();
+           }
+           Router::redirect('adminUsers/index');
+       }
+     }
       $acl = $this->request->get('acl');
       $this->view->acls = Users::getOptionForForm($new = true);
       $this->view->acl = $acl;
-      $this->view->formAction = PROOT . 'adminUsers/edit';
       $this->view->user = $user;
-      //$this->view->contact = $contact;
+      $this->view->contact = $contact;
       $this->view->displayErrors = $user->getErrorMessages();
       $this->view->render('admin/adminUsers/edit');
     }

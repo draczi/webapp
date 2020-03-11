@@ -250,6 +250,14 @@ ul.nav-tabs.search li a {
     text-decoration: none;
 }
 
+h3.password_change {
+    margin: 50px 0 25px;
+}
+
+.password_container {
+    margin: 0 auto;
+}
+
 a {
     text-decoration: none;
 }
@@ -265,6 +273,15 @@ input.admin_search:hover,
 h4.user_adatok {
     margin-bottom: 50px;
     margin-left: 15px;
+}
+
+#link {
+    text-decoration: none;
+    color: black;
+}
+
+h4.redirect {
+    margin: 40px 0;
 }
 
 footer {

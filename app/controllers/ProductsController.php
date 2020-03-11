@@ -1,7 +1,7 @@
 <?php
   namespace App\Controllers;
   use Core\Controller;
-  use Core\H;
+  use Core\FH;
   use Core\Router;
   use Core\Session;
   use App\Models\Users;
@@ -28,16 +28,39 @@
       $min_price = $product->price + $product->bid_increment;
 
      if(!$product) {
-       Session::addMsg('danger', "Ooops ... that product isn't available.");
+       Session::addMsg('danger', "Ooops a Termék nem elérhető!!!");
        Router::redirect('home');
      }
 
      $this->view->product = $product;
      $this->view->vendor = $optionVendor;
      $this->view->user = $user;
-     $this->view->images = $product->getImages();//H::dnd($this->view->images);
+     $this->view->images = $product->getImages();
      $this->view->render('home/products/details');
 
+  }
+
+  //licit megvalósítása
+  public function addAction() {
+    $bid = new Bids();
+    $db = DB::getInstance();
+    if($this->request->isPost()) {
+      $bid->assign($this->request->get());
+      $lastLicit = Bids::findProductBind($bid->product_id);
+        $bid->save();
+        if($bid->validationPassed()) {
+          if($lastLicit) $db->query("UPDATE bids SET deleted = 1 WHERE id = ".$lastLicit->id);
+          Session::addMsg('success', 'Gratulálunk, sikeresen licitált a termékre.');
+        } else {
+             $errorMessage = '';
+            foreach($bid->getErrorMessages() as $error => $val) {
+                $errorMessage .= $val ."<br>";
+            }
+          Session::addMsg('danger',  $errorMessage);
+        }
+
+        Router::redirect('products/details/'.$bid->product_id);
+    }
   }
 
   public static function closeBidsAction($product_id) {

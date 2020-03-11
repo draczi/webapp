@@ -37,7 +37,9 @@ class Contacts extends Model {
   // }
 
   public static function findByUserId($user_id) {
-    return self::findFirst(['conditions'=> "user_id = ?", 'bind'=>[$user_id]]);
+     $db = DB::getInstance();
+     $sql = "SELECT * FROM contact where user_id =" .$user_id;
+     return $db->query($sql)->results();
   }
 
   public static function getOptionForForm() {

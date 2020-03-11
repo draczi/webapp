@@ -1,6 +1,6 @@
 <?php
 namespace Core;
-use Core\H;
+use Core\FH;
 /**
  * Parent class for App Models
  */
@@ -132,7 +132,7 @@ class Model {
         $save = $this->insert($fields);
         // populate object with the id
         if($save){
-          $this->id = static::getDb()->lastID();
+          $this->id = static::getDb()->lastID();FH::dnd($this->id);
         }
       } else {
         $save = $this->update($fields);
@@ -232,7 +232,7 @@ class Model {
       if(property_exists($this,$key) && $whiteListed){
         $this->$key = $val;
       }
-    }
+  }
     return $this;
   }
 

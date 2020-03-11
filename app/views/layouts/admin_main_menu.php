@@ -1,6 +1,6 @@
 <?php
   use Core\Router;
-  use Core\H;
+  use Core\FH;
   use App\Models\Users;
   $menu = Router::getMenu('admin_menu_acl');
   $userMenu = Router::getMenu('user_menu');
@@ -15,10 +15,10 @@
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="main_menu">
     <ul class="navbar-nav mr-auto">
-      <?= H::buildMenuListItems($menu); ?>
+      <?= FH::buildMenuListItems($menu); ?>
     </ul>
     <ul class="navbar-nav mr-2">
-      <?= H::buildMenuListItems($userMenu,"dropdown-menu-right"); ?>
+      <?= FH::buildMenuListItems($userMenu,"dropdown-menu-right"); ?>
     </ul>
   </div><!-- /.navbar-collapse -->
 </nav>

@@ -17,7 +17,9 @@
       <?=FH::checkboxBlock('Emlékezz rám!', 'remember_me', $this->login->getRememberMeChecked(),[],['class'=>'form-group']); ?>
       <?=FH::submitBlock('Bejelentkezés', ['class'=>'btn btn-large btn-primary'],['class'=>'form-group']) ?>
       <div class="text-right">
+         <a href="<?=PROOT?>register/resetPassword" class="text-primary" style="margin-right: 20px">Elfelejtett jelszó</a>
         <a href="<?=PROOT?>register/register" class="text-primary">Regisztráció</a>
+
       </did>
     </form>
   </div>

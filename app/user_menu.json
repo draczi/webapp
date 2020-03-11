@@ -3,6 +3,7 @@
   "Regisztráció" : "register/register",
   "%USERNAME%" : {
     "Adatok" : "register/contact",
+    "Jelszócsere" : "register/passwordChange",
     "Kijelentkezés" : "register/logout"
   }
 }

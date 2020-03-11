@@ -1,7 +1,7 @@
 <?php use Core\FH; use Core\H;   use App\Models\Bids;?>
 <?php $this->start('body'); ?>
 
-<div class="a" style="background-image: url(<?=PROOT?>images/header_kep.jpg); background-size: cover; background-repeat: no-repeat; background-position:center; height: 400px; "> </div>
+<div class="a" style="background-image: url(<?=PROOT?>css/images/header_kep.jpg); background-size: cover; background-repeat: no-repeat; background-position:center; height: 400px; "> </div>
   <div class="search container">
     <form id="filter-form" action="" method="post" autocomplete="off">
       <div class="row">

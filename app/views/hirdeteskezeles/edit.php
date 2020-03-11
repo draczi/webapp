@@ -41,7 +41,7 @@ tinymce.init({
             </div>
             <input type="file" multiple="multiple" name="productImages[]" id="productImages" />
             <div class="col-md-12 text-right">
-                <a href="<?=PROOT?>hirdeteskezeles" class="btn btn-large btn-secondary">Cancel</a>
+                <a href="<?=PROOT?>hirdeteskezeles" class="btn btn-large btn-secondary">Mégse</a>
                 <?= FH::submitTag('Módosítás', ['class' => 'btn btn-large btn-primary']) ?>
             </div>
         </form>

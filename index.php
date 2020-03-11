@@ -23,7 +23,7 @@
   spl_autoload_register('semiautoload');
   session_start();
 
-  $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : []; // minden amit a gyökeren kívül bírunk.
+  $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : []; // minden amit a gyökeren kívül beírunk.
   $db = DB::getInstance();
 
   if(!Session::exists(CURRENT_USER_SESSION_NAME) && COOKIE::exists(REMEMBER_ME_COOKIE_NAME)) {

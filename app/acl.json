@@ -2,22 +2,22 @@
   "Guest" : {
     "denied" : {},
     "Home" : ["*"],
-    "Register" : ["login", "register"],
+    "Register" : ["login", "register", "resetPassword"],
     "Products" : ["*"],
     "Restricted" : ["*"]
   },
   "LoggedIn" : {
     "denied" : {
-      "Register" : ["login", "register"]
+      "Register" : ["login", "register", "resetPassword"]
     },
-    "Register" : ["logout"],
+    "Register" : ["logout", "contact", "passwordChange"],
     "Products" : ["*"]
   },
   "Seller" : {
     "denied" : {
-      "Register" : ["login", "register"]
+      "Register" : ["login", "register", "resetPassword"]
     },
-    "Register" : ["logout"],
+    "Register" : ["logout", "contact", "passwordChange"],
     "Hirdeteskezeles" : ["*"]
   },
   "Admin" : {

@@ -48,9 +48,9 @@
     </div>
     <div class="details-box col-md-6">
       <div class="licit-box col-md-12">
-        <div class="actual-price"><img src="<?=PROOT?>images/licit-hammer-icon.jpg" /><p>Jelenlegi ár: <span><?= (!empty($this->bid)) ? $this->bid['bid'] : $this->product->price ?></span> Ft</p></div>
+        <div class="actual-price"><img src="<?=PROOT?>css/images/licit-hammer-icon.jpg" /><p>Jelenlegi ár: <span><?= (!empty($this->bid)) ? $this->bid['bid'] : $this->product->price ?></span> Ft</p></div>
         <p class="min_price">Nincs minimál ár meghatározva</p>
-        <p class="bid-increment">Licitlépcső: <span class="licit"><?=$this->product->bid_increment ?></span> <span class="min_licit_price">( Minimum ajánlat:  <?= (empty($this->bid)) ? ($this->product->price + $this->product->bid_increment)  : ($this->bid['bid'] + $this->product->bid_increment) ?>  Ft  )</span></p>
+        <p class="bid-increment">Licitlépcső: <span class="licit"><?=$this->product->bid_increment ?></span> <span class="min_licit_price">( Minimum ajánlat:  <?= (empty($this->bid)) ? ($this->product->price + $this->product->bid_increment)  : ($this->bid['bid'] + $this->product->bid_increment)  ?>  Ft  )</span></p>
     <div>
         <div id="bids">
       <?php  ($this->user) ? $this->partial('bids', 'form') :   print('<p style="color: #17a2b8; margin-top: 20px">A licitáláshoz kérlek jelentkezz be!</p>') ; ?>
