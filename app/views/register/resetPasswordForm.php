@@ -10,6 +10,7 @@
     <div class="col-md-6 password_container">
         <form action="" method="POST" enctype="multipart/form-data">
             <?= FH::csrfInput()?>
+             <?= FH::displayErrors($this->displayErrors)?>        
             <?= FH::inputBlock('password','Jelszó', 'password', '', ['class' => 'form-control input-sm'], ['class' => 'form-group']); ?>
             <?= FH::inputBlock('password','Jelszó mégegyszer', 'confirm', '', ['class' => 'form-control input-sm'], ['class' => 'form-group']); ?>
             <?= FH::submitBlock('Save', ['class' => 'btn btn-large btn-info', 'style' => 'width: 100%'], ['class' => 'form-group']); ?>

@@ -30,7 +30,8 @@ class Users extends Model {
         $this->runValidation(new MinValidator($this,['field'=>'username','rule'=>6,'msg'=>'Username must be at least 6 characters.']));
         $this->runValidation(new MaxValidator($this,['field'=>'username','rule'=>150,'msg'=>'Username must be less than 150 characters.']));
         $this->runValidation(new UniqueValidator($this,['field'=>['username','deleted'],'msg'=>'That username already exists. Please choose a new one.']));
-$this->runValidation(new RequiredValidator($this,['field'=>'password','msg'=>'Password is required.']));
+        $this->runValidation(new UniqueValidator($this,['field'=>['email','deleted'],'msg'=>'That email already exists. Please choose a new one.']));
+        $this->runValidation(new RequiredValidator($this,['field'=>'password','msg'=>'Password is required.']));
         if($this->isNew()) {
             $this->runValidation(new MatchesValidator($this,['field'=>'password','rule'=>$this->confirm,'msg'=>"Your passwords do not match."]));
             $this->runValidation(new MinValidator($this,['field'=>'password','rule'=>6,'msg'=>'Password must be a minimum of 6 characters.']));
@@ -132,9 +133,8 @@ $this->runValidation(new RequiredValidator($this,['field'=>'password','msg'=>'Pa
         return true;
     }
 
-    public static function findUserName($user_id) {
+    public static function findUserById($user_id) {
         return self::findFirst([
-            'column' => 'username',
             'conditions' => 'id = ?',
             'bind' => [$user_id]
         ]);
@@ -188,6 +188,12 @@ $this->runValidation(new RequiredValidator($this,['field'=>'password','msg'=>'Pa
         $binds[] = $offset;
         $results = $db->query($select . $sql . $pager, $binds)->results();
         return ['results' => $results, 'total' => $total];
+    }
+
+    public static function modifyPassword($id, $password) {
+        $db = DB::getInstance();
+        $query = "UPDATE users SET `password` = '".$password."' WHERE `id` = '".$id ."' LIMIT 1 " ; H::dnd( $db->query($query));
+        $result = $db->query($query);
     }
 
     public static function hasFilters($options){

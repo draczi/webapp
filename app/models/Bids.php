@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Core\Model;
-use Core\Validators\{RequiredValidator,NumericValidator,MinValidator,UniqueValidator};
+use Core\Validators\{RequiredValidator,NumericValidator,BidMinValidator,UniqueValidator};
 use Core\FH;
 use Core\DB;
 use Core\Session;
@@ -25,7 +25,7 @@ class Bids extends Model {
         $this->runValidation(new UniqueValidator($this,['field'=>['user_id','product_id','deleted'],'msg'=>'Korábban már licitált, Ön vezeti a licitet. ']));
         $this->runValidation(new NumericValidator($this, ['field' => 'bid_amount', 'msg' => 'Licitként csak számot adhat meg!']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'bid_amount', 'msg' => 'Kérlek adj meg egy licit.']));
-        $this->runValidation(new MinValidator($this,['field'=>'bid_amount','rule'=>$this->min_bid_price,'msg'=>'Licited a minimum alatt van! Kérlek adj meg egy összeget legalább ' . $this->min_bid_price . ' Ft értékben.']));
+        $this->runValidation(new BidMinValidator($this,['field'=>'bid_amount','rule'=>$this->min_bid_price,'msg'=>'Licited a minimum alatt van! Kérlek adj meg egy összeget legalább ' . $this->min_bid_price . ' Ft értékben.']));
     }
 
     public static function findProductBind($product_id) {

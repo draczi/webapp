@@ -1,2 +1,2 @@
 # MVC
-diplomamunka alapja
+diplomamunka

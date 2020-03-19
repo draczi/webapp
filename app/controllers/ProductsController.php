@@ -19,11 +19,11 @@
       $product = Products::findById((int)$product_id);
       $bid = Bids::findProductBind($product->id);
       if ($bid) {
-         $bidUser = Users::findUserName($bid->user_id);
+         $bidUser = Users::findUserById($bid->user_id);
          $optionBid = ['bid' => $bid->bid_amount, 'bid_user' => $bidUser->username];
          $this->view->bid = $optionBid;
       }
-      $vendor = Users::findUserName($product->vendor);
+      $vendor = Users::findUserById($product->vendor);
       $optionVendor = ['vendor' => $vendor->username, 'login_date' => $vendor->login_date];
       $min_price = $product->price + $product->bid_increment;
 
@@ -58,7 +58,6 @@
             }
           Session::addMsg('danger',  $errorMessage);
         }
-
         Router::redirect('products/details/'.$bid->product_id);
     }
   }

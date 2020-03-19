@@ -132,7 +132,7 @@ class Model {
         $save = $this->insert($fields);
         // populate object with the id
         if($save){
-          $this->id = static::getDb()->lastID();FH::dnd($this->id);
+          $this->id = static::getDb()->lastID();
         }
       } else {
         $save = $this->update($fields);
