@@ -2,22 +2,21 @@
 
   define('DEBUG', true);
 
-  define('RUN_MIGRATIONS_FROM_BROWSER', false);
+  //adatbázis kapcsolat adatai
+  define('DB_NAME', 'auction'); // adatbázis neve
+  define('DB_USER', 'root'); // adatbázis felhasználói név
+  define('DB_PASSWORD', ''); // adatbázis jelszó
+  define('DB_HOST', '127.0.0.1'); // adatbázis elerhetősége
 
-  define('DB_NAME', 'auction'); // database name
-  define('DB_USER', 'root'); // database user
-  define('DB_PASSWORD', ''); // database password
-  define('DB_HOST', '127.0.0.1'); // database elerhetősége
+  define('DEFAULT_CONTROLLER', 'Home'); // alapértelmezett vezérlő ha az URL címben nincs megadva
+  define('DEFAULT_LAYOUT', 'default'); // alapértelmezett stíluslap beállítás
 
-  define('DEFAULT_CONTROLLER', 'Home'); // default controller if there isn't one defined in the URL
-  define('DEFAULT_LAYOUT', 'default'); // if no layout is set int the controller use this $_layout
+  define('PROOT', '/webapp/'); // a gyökérkönyvtár meghatározása, webszerveren csak '/'
+  define('SITE_TITLE', 'Mezőgazdasági Aukciós Portál'); // Az weboldal alapértelemezett fejléce
+  define('MENU_BRAND', 'Mezőgazdasági és Őstermelői Aukciós Portál'); // Navigációnál megjelenő logó vagy cím
 
-  define('PROOT', '/webapp/'); // set this to '/' for a live server
-  define('SITE_TITLE', 'Mezőgazdasági Aukciós Portál'); // This will be used if no site title is set
-  define('MENU_BRAND', 'Mezőgazdasági és Őstermelői Aukciós Portál');
-
-  define('CURRENT_USER_SESSION_NAME', 'ln53huvGqXwvvLHV'); // session name for logged in user
-  define('REMEMBER_ME_COOKIE_NAME', 'NZAMr4KVJbOyFazP'); // cookie name for logged in user remember me
+  define('CURRENT_USER_SESSION_NAME', 'ln53huvGqXwvvLHV'); // munkamenet neve a bejelentkezett felhasználó számára.
+  define('REMEMBER_ME_COOKIE_NAME', 'NZAMr4KVJbOyFazP'); // cookie név a bejelentkezett felhasználó száméra
   define('REMEMBER_ME_COOKIE_EXPIRY', 2592000); // time in seconds for remember me cookie to live (30days)
 
-  define('ACCESS_RESTRICTED', 'Restricted'); // controller name for the restricted redirect
+  define('ACCESS_RESTRICTED', 'Restricted'); // nem megfelelő oldalcím vagy jogosultság hiánya esetén erre az oldalra küldje tovább

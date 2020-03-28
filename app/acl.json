@@ -6,7 +6,7 @@
     "Products" : ["*"],
     "Restricted" : ["*"]
   },
-  "LoggedIn" : {
+  "Registered" : {
     "denied" : {
       "Register" : ["login", "register", "resetPassword"]
     },
@@ -20,7 +20,7 @@
     "Register" : ["logout", "contact", "passwordChange"],
     "Hirdeteskezeles" : ["*"]
   },
-  "Admin" : {
+  "Administrator" : {
     "denied" : {},
     "Admindashboard" : ["*"],
     "Adminproduct" : ["*"],

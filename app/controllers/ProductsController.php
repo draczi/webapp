@@ -1,7 +1,7 @@
 <?php
   namespace App\Controllers;
   use Core\Controller;
-  use Core\FH;
+  use Core\H;
   use Core\Router;
   use Core\Session;
   use App\Models\Users;
@@ -43,13 +43,13 @@
   //licit megvalósítása
   public function addAction() {
     $bid = new Bids();
-    $db = DB::getInstance();
     if($this->request->isPost()) {
       $bid->assign($this->request->get());
-      $lastLicit = Bids::findProductBind($bid->product_id);
+      $product = Products::findById($bid->product_id);
+        $lastLicit = Bids::findProductBind($bid->product_id);
+        if($lastLicit) Bids::bindDelete($lastLicit->bid_id);
         $bid->save();
         if($bid->validationPassed()) {
-          if($lastLicit) $db->query("UPDATE bids SET deleted = 1 WHERE id = ".$lastLicit->id);
           Session::addMsg('success', 'Gratulálunk, sikeresen licitált a termékre.');
         } else {
              $errorMessage = '';

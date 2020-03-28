@@ -9,7 +9,7 @@ use Core\Router;
 
 class Bids extends Model {
 
-    public $id, $product_id, $user_id, $bid_date, $bid_amount, $deleted = 0, $min_bid_price;
+    public $bid_id, $product_id, $user_id, $bid_date, $bid_amount, $deleted = 0, $min_bid_price;
     protected static $_table = "bids";
     protected static $_softDelete = true;
 
@@ -30,14 +30,19 @@ class Bids extends Model {
 
     public static function findProductBind($product_id) {
         return self::findFirst([
-            'conditions' => 'product_id = ?',
+            'conditions' => 'product_id = ? AND deleted = 0',
             'bind' => [$product_id]
         ]);
     }
 
+    public static function bindDelete($bid_id) {
+        $db = DB::getInstance();
+        $db->query("UPDATE bids SET deleted = 1 WHERE bid_id =" .$bid_id);
+    }
+
     public static function findProductAndUserBind($product_id, $user_id) {
         return self::findFirst([
-            'column' => 'id',
+            'column' => 'bid_id',
             'conditions' => 'product_id = ? AND user_id = ? AND deleted = 0',
             'bind' => [$product_id, $user_id]
         ]);

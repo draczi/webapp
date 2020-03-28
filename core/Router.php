@@ -10,6 +10,7 @@
     public static function route($url) {
 
       //controller
+      //
       $controller = (isset($url[0]) && $url[0] != '') ? ucwords($url[0]).'Controller' : DEFAULT_CONTROLLER.'Controller';
       $controller_name = str_replace('Controller','',$controller);
       array_shift($url);
@@ -60,7 +61,6 @@
       $grantAccess = false;
 
       if(Session::exists(CURRENT_USER_SESSION_NAME)) {
-        $current_user_acls[] = "LoggedIn";
         // foreach(Users::currentUser()->acls() as $a) {
         //   $current_user_acls[] = $a;
         // }

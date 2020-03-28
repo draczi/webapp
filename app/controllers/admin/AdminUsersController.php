@@ -45,7 +45,7 @@
 
     public static function szotar($string) {
         switch ($string) {
-            case "Admin": $acl_name = "Adminisztrátor"; break;
+            case "Administrator": $acl_name = "Adminisztrátor"; break;
             case "Seller": $acl_name = "Eladó"; break;
             case "Registered": $acl_name = "Regisztrált Felhasználó"; break;
         }

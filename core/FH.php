@@ -270,7 +270,7 @@ class FH {
     foreach($menu as $key => $val):
       $active = '';
       if($key == '%USERNAME%'){
-        $key = (Users::currentUser())? "Hello " .Users::currentUser()->fname : $key;
+        $key = (Users::currentUser())? "Üdvözöllek " . strtoupper(Users::currentUser()->username) : $key;
       }
       if(is_array($val)): ?>
         <li class="nav-item dropdown">
@@ -293,12 +293,5 @@ class FH {
     <?php endforeach;
     return ob_get_clean();
   }
-
-    public static function dnd($data) {
-      echo '<pre>';
-      var_dump($data);
-      echo '</pre>';
-      die();
-    }
 
 }

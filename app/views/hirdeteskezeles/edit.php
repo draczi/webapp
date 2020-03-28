@@ -2,7 +2,7 @@
 use Core\FH;
 use Core\View;
 ?>
-<?php $this->setSiteTitle($this->product->name . 'szerkesztése') ?>
+<?php $this->setSiteTitle($this->product->product_name . ' szerkesztése') ?>
 <?php $this->start('head')?>
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
@@ -12,7 +12,7 @@ tinymce.init({
 </script>
 <?php $this->end() ?>
 <?php $this->start('body')?>
-<h3 class="new-product text-left"><?= $this->product->name ?> szerkesztése</h3>
+<h3 class="new-product text-left"><?= $this->product->product_name ?> szerkesztése</h3>
 <hr/>
 <div class="row">
     <div class="product-form col-md-10 ">
@@ -20,14 +20,13 @@ tinymce.init({
             <?= FH::csrfInput()?>
             <?= FH::displayErrors($this->displayErrors) ?>
             <div class="row">
-                <?= FH::inputBlock('text', 'Termék neve', 'name', $this->product->name, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-12']); ?>
+                <?= FH::inputBlock('text', 'Termék neve', 'product_name', $this->product->product_name, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-12']); ?>
             </div>
             <div class="row">
                 <?= FH::inputBlock('text', 'Kikiáltási ár', 'price', $this->product->price, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
-                <?= FH::inputBlock('text', 'Minimális ár', 'min_price', $this->product->min_price, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
                 <?= FH::inputBlock('text', 'Mennyiség', 'quantity', $this->product->quantity, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
                 <?= FH::inputBlock('text', 'Licitlépcső', 'bid_increment', $this->product->bid_increment, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
-                <?php if ($this->product->created_at == date('Y-m-d')) { ?>
+                <?php if ($this->product->create_date == date('Y-m-d')) { ?>
                     <?= FH::selectBlock('Aukció időtartalma', 'auction_time', $this->product->auction_time, $this->auction_time,['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']) ?>
                 <?php } else { ?>
                     <?= FH::selectBlock('Aukció időtartalma', 'auction_time', $this->product->auction_time, $this->auction_time,['class' => 'form-control input-sm', 'disabled' => 'true'], ['class' => 'form-group col-md-3'])?>

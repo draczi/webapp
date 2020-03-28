@@ -16,11 +16,11 @@ class UniqueValidator extends CustomValidator{
     $conditions = ["{$this->field} = ?"];
     $bind = [$value];
 
-    //check updating record
-    if(!empty($this->_model->id)){
-      $conditions[] = "id != ?";
-      $bind[] = $this->_model->id;
-    }
+    // //check updating record
+    // if(!empty($this->_model->id)){
+    //   $conditions[] = "id != ?";
+    //   $bind[] = $this->_model->id;
+    // }
 
     //this allows you to check multiple fields for Unique
     foreach($this->additionalFieldData as $adds){

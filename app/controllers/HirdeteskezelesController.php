@@ -40,10 +40,11 @@
             $msg .= $message . " ";
           }
           $product->addErrorMessage('productImages', trim($msg));
-        }
+      }
         $this->request->csrfCheck();//H::dnd($this->request->get());
         $product->assign($this->request->get(), Products::blackList);
         $product->vendor = $this->currentUser->id;
+        $product->auction_end = date('Y-m-d H:i:s',date(strtotime("+".$this->request->get("auction_time")." day", strtotime(date('Y-m-d H:i:s')))));
         $product->save();
         if($product->validationPassed()) {
           //upload images

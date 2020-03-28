@@ -14,11 +14,11 @@
    protected static $_softDelete = true;
 
    public function beforeSave() {
-    $this->timeStamps();
+    if (!$this->isNew()) $this->timeStamps();
    }
 
    public function validator() {
-     $requiredFields = ['name' => "Name", 'price' => "Price", 'min_price' => "Min Price", 'quantity' => "Mennyiség", 'description' => "Termékleírás"];
+     $requiredFields = ['product_name' => "Name", 'price' => "Price", 'quantity' => "Mennyiség", 'description' => "Termékleírás"];
      foreach($requiredFields as $field => $display) {
        $this->runValidation(new RequiredValidator($this, ['field' => $field, 'msg' => $display." is required"]));
      }
@@ -59,7 +59,7 @@
     $where = "products.deleted = 0 AND pi.sort = '0'";
     $binds = [];
     if(array_key_exists('search',$options) && !empty($options['search'])) {
-      $where .= " AND (products.name LIKE ? OR categories.category_name LIKE ?)";
+      $where .= " AND (products.product_name LIKE ? OR categories.category_name LIKE ?)";
       $binds[] = "%" . $options['search'] . "%";
       $binds[] = "%" . $options['search'] . "%";
     }

@@ -75,7 +75,7 @@
 
     public function editAction($id) {
       $user = Users::currentUser();
-      $product = Products::findByIdAndUserId((int)$id, $user->id);
+      $product = Products::findById((int)$id);
       $auction_time = array('7' => '1 hét', '14' => '2 hét', '21' => '3 hét');
       if(!$product) {
         Session::addMsg('danger', 'You not have permission to edit that product');

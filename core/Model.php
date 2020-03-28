@@ -1,6 +1,6 @@
 <?php
 namespace Core;
-use Core\FH;
+use Core\H;
 /**
  * Parent class for App Models
  */
@@ -41,7 +41,7 @@ class Model {
     foreach($columns as $column){
       $key = $column->Field;
       $fields[$key] = $this->{$key};
-    }
+  }
     return $fields;
   }
 
@@ -134,14 +134,14 @@ class Model {
         if($save){
           $this->id = static::getDb()->lastID();
         }
-      } else {
+    } else {
         $save = $this->update($fields);
       }
       // run after save
       if($save){
         $this->afterSave();
       }
-    }
+  }
     return $save;
   }
 
@@ -326,7 +326,7 @@ class Model {
     $this->update_at = $now;
     if($this->isNew()){
       $this->created_at = $now;
-    }
+  }
   }
 
   /**
@@ -335,7 +335,7 @@ class Model {
    * @return boolean returns true if there isn't an id false if there is one
    */
   protected function isNew(){
-    return (property_exists($this,'id') && !empty($this->id))? false : true;
+    return (property_exists($this,'id') && !empty($this->id)) ? false : true;
   }
 
 }

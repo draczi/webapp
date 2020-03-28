@@ -17,9 +17,9 @@
   <main class="products-wrapper col-md-12">
     <?php foreach($this->products as $product) : ?>
       <div class="card">
-        <img src="<?= PROOT .$product->url?>" class="card-img-top" alt="<?=$product->name?>">
+        <img src="<?= PROOT .$product->url?>" class="card-img-top" alt="<?=$product->product_name?>">
         <div class="card-body">
-          <h5 class="card-title"><a href="<?=PROOT?>products/details/<?=$product->id?>"><?=$product->name?></a></h5>
+          <h5 class="card-title"><a href="<?=PROOT?>products/details/<?=$product->id?>"><?=$product->product_name?></a></h5>
           <p class="p-cat"><?=$product->category?></p>
           <?php $bid = Bids::findProductBind($product->id) ?>
           <p class="price"><?=(!empty($bid)) ? $bid->bid_amount : $product->price?> Ft</p>

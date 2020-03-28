@@ -10,7 +10,7 @@ use Core\Validators\UniqueValidator;
 use Core\H;
 
 class resetPassword extends Model {
-  public $id, $email, $token, $resetPassword, $password, $confirm;
+  public $id, $token, $resetPassword, $password, $confirm;
   protected static $_table = 'reset_password';
 
   public function validator(){

@@ -16,9 +16,5 @@ class Login extends Model {
   public function getRememberMeChecked(){
     return $this->remember_me == 'on';
   }
-  public function belepesDate() {
-    $login_date = $now = date('Y-m-d H:i:s');
-    $a = $this->query("UPDATE users SET login_date = ' .$login_date . ' where id = 1");
-    return $a;
-  }
+ 
 }

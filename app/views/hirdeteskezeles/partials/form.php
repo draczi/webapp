@@ -5,11 +5,10 @@
   <?= FH::csrfInput()?>
   <?= FH::displayErrors($this->displayErrors) ?>
   <div class="row">
-  <?= FH::inputBlock('text', 'Termék neve', 'name', $this->product->name, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-12']); ?>
+  <?= FH::inputBlock('text', 'Termék neve', 'product_name', $this->product->product_name, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-12']); ?>
   </div>
   <div class="row">
   <?= FH::inputBlock('text', 'Kikiáltási ár', 'price', $this->product->price, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
-  <?= FH::inputBlock('text', 'Minimális ár', 'min_price', $this->product->min_price, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
   <?= FH::inputBlock('text', 'Mennyiség', 'quantity', $this->product->quantity, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
   <?= FH::inputBlock('text', 'Licitlépcső', 'bid_increment', $this->product->bid_increment, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
   <?= FH::selectBlock('Aukció időtartalma', 'auction_time', $this->product->auction_time, $this->auction_time,['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']) ?>

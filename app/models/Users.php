@@ -16,10 +16,11 @@ use App\Controllers\Admin\AdminUsersController;
 use Core\H;
 
 class Users extends Model {
-    protected static $_table='users', $_softDelete = true;
+    protected static $_table='users';
     public static $currentLoggedInUser = null;
-    public $id,$username,$email,$password,$fname,$lname,$acl,$deleted = 0,$confirm, $login_date, $create_date;
-    const blackListedFormKeys = ['id','deleted'];
+    public $id,$username,$email,$password,$fname,$lname,$acl,$confirm, $login_date, $create_date;
+    public $address, $city, $state,$country, $zip_code, $phone, $mobile_phone, $producer_id;
+    const blackListedFormKeys = ['id'];
 
     public function validator(){
         $this->runValidation(new RequiredValidator($this,['field'=>'fname','msg'=>'First Name is required.']));
@@ -29,8 +30,8 @@ class Users extends Model {
         $this->runValidation(new MaxValidator($this,['field'=>'email','rule'=>150,'msg'=>'Email must be less than 150 characters.']));
         $this->runValidation(new MinValidator($this,['field'=>'username','rule'=>6,'msg'=>'Username must be at least 6 characters.']));
         $this->runValidation(new MaxValidator($this,['field'=>'username','rule'=>150,'msg'=>'Username must be less than 150 characters.']));
-        $this->runValidation(new UniqueValidator($this,['field'=>['username','deleted'],'msg'=>'That username already exists. Please choose a new one.']));
-        $this->runValidation(new UniqueValidator($this,['field'=>['email','deleted'],'msg'=>'That email already exists. Please choose a new one.']));
+        $this->runValidation(new UniqueValidator($this,['field'=>['username'],'msg'=>'That username already exists. Please choose a new one.']));
+        $this->runValidation(new UniqueValidator($this,['field'=>['email'],'msg'=>'That email already exists. Please choose a new one.']));
         $this->runValidation(new RequiredValidator($this,['field'=>'password','msg'=>'Password is required.']));
         if($this->isNew()) {
             $this->runValidation(new MatchesValidator($this,['field'=>'password','rule'=>$this->confirm,'msg'=>"Your passwords do not match."]));
@@ -96,7 +97,7 @@ class Users extends Model {
 
     public function acls() {
         if(empty($this->acl)) return [];
-        $sql = $this->query("SELECT acls.user_level as acl FROM users JOIN acls ON acls.id = users.acl WHERE users.id =" .$this->id)->results();
+        $sql = $this->query("SELECT acls.user_level as acl FROM users JOIN acls ON acls.acl_id = users.acl WHERE users.id =" .$this->id)->results();
         return $sql[0]->acl;
     }
 
@@ -150,11 +151,11 @@ class Users extends Model {
 
     public static function getOptionForForm($new=false) {
         $db = DB::getInstance();
-        $acls = $db->query("SELECT id, user_level FROM acls")->results();
+        $acls = $db->query("SELECT acl_id, user_level FROM acls")->results();
         $aclsAry = ['0' =>' Összes'];
         if ($new==true) $aclsAry = [];
         foreach($acls as $acl) {
-            $aclsAry[$acl->id] = AdminUsersController::szotar($acl->user_level);
+            $aclsAry[$acl->acl_id] = AdminUsersController::szotar($acl->user_level);
         }
         return $aclsAry;
     }
@@ -162,7 +163,7 @@ class Users extends Model {
         $db = DB::getInstance();
         $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
         $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
-        $where = "users.deleted = 0";
+        $where = 'create_date < NOW()';
         $binds = [];
         if(array_key_exists('search',$options) && !empty($options['search'])) {
             $where .= " AND (users.username LIKE ? OR users.fname LIKE ? OR users.lname LIKE ?)";
@@ -178,7 +179,7 @@ class Users extends Model {
         $select = "SELECT COUNT(*) as total";
         $sql = " FROM users
         JOIN acls
-        ON users.acl = acls.id
+        ON users.acl = acls.acl_id
         WHERE {$where}
         ";
         $total = $db->query($select . $sql, $binds)->first()->total;
