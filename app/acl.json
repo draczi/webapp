@@ -21,7 +21,10 @@
     "Hirdeteskezeles" : ["*"]
   },
   "Administrator" : {
-    "denied" : {},
+    "denied" : {
+        "Register" : ["login", "register", "resetPassword"]
+    },
+    "Register" : ["logout", "contact", "passwordChange"],
     "Admindashboard" : ["*"],
     "Adminproduct" : ["*"],
     "AdminCategories" : ["*"],
