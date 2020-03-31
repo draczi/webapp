@@ -13,7 +13,7 @@
       <tr data-id="<?= $category->id?>">
         <td><?=$category->id?></td>
         <td><?=$category->category_name ?></td>
-        <td><?= ($category->parent_id == 0) ? 'Főkategória' : Categories::categoryId($category->parent_id)->category_name ?></td>
+        <td><?= ($category->parent == NULL) ? 'Főkategória' : Categories::categoryId($category->parent)->category_name ?></td>
         <td class="text-right">
           <a href="<?=PROOT?>adminCategories/edit/<?=$category->id?>"  class="btn btn-sm btn-info mr-1 ">Szerkesztés</i></a>
           <a href="<?=PROOT?>adminCategories/delete/<?=$category->id?>"  class="btn btn-sm btn-danger mr-1 ">Törtés</i></a>

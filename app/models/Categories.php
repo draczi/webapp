@@ -7,7 +7,7 @@
   use Core\DB;
 
   class Categories extends Model {
-    public $id, $category_name, $parent_id;
+    public $id, $category_name, $parent;
     protected static $_table = "categories";
 
     public function validator() {
@@ -37,10 +37,10 @@
     public static function getCategoryParentForForm() {
       $categories = self::find([
         'columns' => 'id, category_name',
-        'conditions' => 'parent_id = 0',
+        'conditions' => 'parent is null',
         'order' => 'category_name'
       ]);
-      $categoriesAry = ['0' =>' Fő Kategoria'];
+      $categoriesAry = ['0' =>' Válassz egy kategóriát'];
       foreach($categories as $category) {
         $categoriesAry[$category->id] = $category->category_name;
       }
@@ -52,7 +52,7 @@
         'columns' => 'id, category_name',
         'order' => 'category_name'
       ]);
-      $categoriesAry = ['0' =>' Fő Kategoria'];
+      $categoriesAry = ['0' =>'Összes kategória'];
       foreach($categories as $category) {
         $categoriesAry[$category->id] = $category->category_name;
       }

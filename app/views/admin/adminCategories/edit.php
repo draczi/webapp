@@ -13,7 +13,7 @@
     <form action="" method="POST" enctype="multipart/form-data">
       <?= FH::csrfInput()?>
       <?= FH::displayErrors($this->displayErrors) ?>
-      <?= FH::selectBlock('Kategoria', 'parent_id', "", $this->parent,['class' => 'form-control input-sm'], ['class' => 'form-group']) ?>
+      <?= FH::selectBlock('Kategoria', 'parent', "", $this->parent,['class' => 'form-control input-sm'], ['class' => 'form-group']) ?>
       <?= FH::inputBlock('text', 'Kategória neve', 'category_name', $this->categories->category_name, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-2']); ?>
       <div class="col-md-12 text-right">
           <a href="<?=PROOT?>adminCategories" class="btn btn-large btn-secondary">Mégse</a>
