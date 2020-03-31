@@ -1,5 +1,5 @@
 <?php
-  use Core\DB;
+  use Core\Database;
   use Core\H;
   define('DS', DIRECTORY_SEPARATOR);
   define('ROOT', dirname(__FILE__));
@@ -21,7 +21,7 @@
 
   spl_autoload_register('autoload');
 
-  $db = DB::getInstance();
+  $db = Database::getInstance();
 
   $migrationTable = $db->query("SHOW TABLES LIKE 'migrations'")->results();
   $previousMigs = [];

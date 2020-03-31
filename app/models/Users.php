@@ -5,7 +5,7 @@ use App\Models\Users;
 use App\Models\UserSessions;
 use Core\Cookie;
 use Core\Session;
-use Core\DB;
+use Core\Database;;
 use Core\Validators\MinValidator;
 use Core\Validators\MaxValidator;
 use Core\Validators\RequiredValidator;
@@ -150,7 +150,7 @@ class Users extends Model {
     }
 
     public static function getOptionForForm($new=false) {
-        $db = DB::getInstance();
+        $db = Database::getInstance();
         $acls = $db->query("SELECT acl_id, user_level FROM acls")->results();
         $aclsAry = ['0' =>' Összes'];
         if ($new==true) $aclsAry = [];
@@ -160,7 +160,7 @@ class Users extends Model {
         return $aclsAry;
     }
     public static function allUsers($options) {
-        $db = DB::getInstance();
+        $db = Database::getInstance();
         $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
         $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
         $where = 'create_date < NOW()';
@@ -192,7 +192,7 @@ class Users extends Model {
     }
 
     public static function modifyPassword($id, $password) {
-        $db = DB::getInstance();
+        $db = Database::getInstance();
         $query = "UPDATE users SET `password` = '".$password."' WHERE `id` = '".$id ."' LIMIT 1 " ; H::dnd( $db->query($query));
         $result = $db->query($query);
     }

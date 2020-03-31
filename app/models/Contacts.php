@@ -5,7 +5,7 @@ use App\Models\Users;
 use App\Models\UserSessions;
 use Core\Cookie;
 use Core\Session;
-use Core\DB;
+use Core\Database;
 use Core\Validators\MinValidator;
 use Core\Validators\MaxValidator;
 use Core\Validators\RequiredValidator;
@@ -37,13 +37,13 @@ class Contacts extends Model {
   // }
 
   public static function findByUserId($user_id) {
-     $db = DB::getInstance();
+     $db = Database::getInstance();
      $sql = "SELECT * FROM contact where user_id =" .$user_id;
      return $db->query($sql)->results();
   }
 
   public static function getOptionForForm() {
-    $db = DB::getInstance();
+    $db = Database::getInstance();
     $acls = $db->query("SELECT id, user_level FROM acls")->results();
     $aclsAry = ['0' =>' Összes'];
     foreach($acls as $acl) {

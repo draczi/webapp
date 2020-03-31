@@ -4,7 +4,7 @@
   use Core\Model;
   use Core\Validators\{RequiredValidator,UniqueValidator};
   use Core\H;
-  use Core\DB;
+  use Core\Database;
 
   class Categories extends Model {
     public $id, $category_name, $parent;
@@ -16,7 +16,7 @@
     }
 
     public static function allCategories() {
-      $db = DB::getInstance();
+      $db = Database::getInstance();
       return $db-> query("SELECT * FROM categories")->results();
     }
 

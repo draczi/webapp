@@ -6,7 +6,7 @@
   use Core\H;
   use Core\Session;
   use Core\Router;
-  use Core\DB;
+  use Core\Database;;
 
 
   class AdminCategoriesController extends Controller {
@@ -57,7 +57,7 @@
       if($this->request->isPost()) {
         $this->request->csrfCheck();
         $categories->assign($this->request->get());
-        $db = DB::getInstance();
+        $db = Database::getInstance();
       //  $db->query("UPDATE categories SET category_name = '{$categories->category_name}', parent_id = '{$categories->parent_id}' where id = " .$categories->id);
         $categories->save();
         if($categories->validationPassed()) {

@@ -3,7 +3,7 @@ namespace App\Models;
 use Core\Model;
 use Core\Validators\{RequiredValidator,NumericValidator,BidMinValidator,UniqueValidator};
 use Core\FH;
-use Core\DB;
+use Core\Database;
 use Core\Session;
 use Core\Router;
 
@@ -36,7 +36,7 @@ class Bids extends Model {
     }
 
     public static function bindDelete($bid_id) {
-        $db = DB::getInstance();
+        $db = Database::getInstance();
         $db->query("UPDATE bids SET deleted = 1 WHERE bid_id =" .$bid_id);
     }
 

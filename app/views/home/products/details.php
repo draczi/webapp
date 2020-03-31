@@ -2,7 +2,7 @@
     use Core\FH;
     use Core\H;
     use App\Controllers\ProductsController;
-    use Core\DB;
+    use Core\Database;
 ?>
 <?php $this->setSiteTitle($this->product->name); ?>
 <?php $this->start('body'); ?>

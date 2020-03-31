@@ -1,6 +1,6 @@
 <?php
   namespace Core;
-  use Core\DB;
+  use Core\Database;
   use Core\H;
 
   abstract class Migration{
@@ -15,7 +15,7 @@
   ];
 
   public function __construct($isCli){
-    $this->_db = DB::getInstance();
+    $this->_db = Database::getInstance();
     $this->_isCli = $isCli;
   }
 

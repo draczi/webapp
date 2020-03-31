@@ -2,7 +2,7 @@
   use Core\Session;
   use Core\Cookie;
   use Core\Router;
-  use Core\DB;
+  use Core\Database;;
   use App\Models\Users;
   define('DS', DIRECTORY_SEPARATOR); //per jelet helyettesiti
   define('ROOT', dirname(__FILE__)); // documentum gyökérkönyvtára
@@ -24,7 +24,7 @@
   session_start();
 
   $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : []; // minden amit a gyökeren kívül beírunk.
-  $db = DB::getInstance();
+  $db = Database::getInstance();
 
   if(!Session::exists(CURRENT_USER_SESSION_NAME) && COOKIE::exists(REMEMBER_ME_COOKIE_NAME)) {
     Users::loginUserFromCookie();

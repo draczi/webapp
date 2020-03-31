@@ -4,7 +4,7 @@ use \PDO;
 use \PDOException;
 use Core\H;
 
-class DB {
+class Database {
   private static $_instance = null;
   private $_pdo, $_query, $_error = false, $_result, $_count = 0, $_lastInsertID = null, $_fetchStyle = PDO::FETCH_OBJ;
 

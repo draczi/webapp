@@ -7,7 +7,7 @@
   use App\Models\Users;
   use App\Models\Products;
   use App\Models\Bids;
-  use Core\DB;
+  use Core\Database;
 
 
   class ProductsController extends Controller{
@@ -63,7 +63,7 @@
   }
 
   public static function closeBidsAction($product_id) {
-    $db = DB::getInstance();
+    $db = Database::getInstance();
     return $db->query("UPDATE products SET deleted = 1 WHERE id= " .$product_id );
   }
 }

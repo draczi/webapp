@@ -3,7 +3,7 @@
   use Core\Model;
   use Core\Validators\{RequiredValidator,NumericValidator};
   use Core\H;
-  use Core\DB;
+  use Core\Database;
 
  class Products extends Model {
 
@@ -39,7 +39,7 @@
    }
 
    public static function findByUserIdAndImages($user_id) {
-     $db = DB::getInstance();
+     $db = Database::getInstance();
      $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.deleted = 0 AND  products.vendor = " .$user_id;
      return $db->query($sql)->results();
    }
@@ -53,7 +53,7 @@
    }
 
    public static function allProducts($options) {
-    $db = DB::getInstance();
+    $db = Database::getInstance();
     $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
     $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
     $where = "products.deleted = 0 AND pi.sort = '0'";
@@ -94,14 +94,14 @@
   }
 
   public static function auctionEndSold($user_id) {
-    $db = DB::getInstance();
+    $db = Database::getInstance();
     $now = date('Y-m-d H:i:s');
     $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 1 AND  '.$now.' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
     return $db->query($sql)->results();
   }
 
   public static function auctionEndNotSold($user_id) {
-    $db = DB::getInstance();
+    $db = Database::getInstance();
     $now = date('Y-m-d H:i:s');
     $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 0 AND '$now' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
     return $db->query($sql)->results();

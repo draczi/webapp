@@ -16,7 +16,7 @@ class Model {
 
   public static function getDb(){
     if(!self::$_db) {
-      self::$_db = DB::getInstance();
+      self::$_db = Database::getInstance();
     }
     return self::$_db;
   }
