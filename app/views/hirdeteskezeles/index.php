@@ -9,8 +9,8 @@
     <div class="product-date col-md-2">Aukció kezdete<p class="start_date" style="margin: 0"><?= $product->create_date ?></p>Aukció vége<p class="end_date" style="margin: 0"><?= $product->auction_end ?></p></div>
     <div class="product-price col-md-2">Kikiáltási ár<p class="price"><?= $product->price ?> Ft</p>Aktuális ár<p class="actual_price"><?= $product->price ?> Ft</p></div>
     <div class="product-icons col-md-1">
-        <a href="<?=PROOT?>hirdeteskezeles/edit/<?=$product->product_id?>" ><span class="fa fa-edit" style="color: #17a2b8; margin-top: 40px" ></span></a>
-        <a href="#" style="margin-left: 10px;"><span class="fa fa-trash-alt" onclick="deleteProduct('<?=$product->product_id?>');return false;" style="color: #17a2b8;"></span></a>
+        <a href="<?=PROOT?>hirdeteskezeles/edit/<?=$product->id?>" ><span class="fa fa-edit" style="color: #17a2b8; margin-top: 40px" ></span></a>
+        <a href="<?=PROOT?>hirdeteskezeles/delete/<?=$product->id?>" style="margin-left: 10px;"><span class="fa fa-trash-alt" style="color: #17a2b8;"></span></a>
     </div>
   </div>
 <?php endforeach; ?>
