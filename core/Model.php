@@ -175,13 +175,11 @@ class Model {
    */
   public function delete() {
     if($this->id == '' || !isset($this->id)) return false;
-    $this->beforeDelete();
     if(static::$_softDelete) {
       $deleted = $this->update(['deleted' => 1]);
     } else {
       $deleted = static::getDb()->delete(static::$_table, $this->id);
     }
-    $this->afterDelete();
     return $deleted;
   }
 
@@ -280,18 +278,6 @@ class Model {
       $this->_validationErrors[$field] = $msg;
     }
   }
-
-  /**
-   * Method that is called before delete
-   * @method beforeDelete
-   */
-  public function beforeDelete(){}
-
-  /**
-   * Method that is called after delete
-   * @method afterDelete
-   */
-  public function afterDelete(){}
 
   /**
    * Method that is called before save
