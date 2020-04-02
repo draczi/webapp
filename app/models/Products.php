@@ -38,7 +38,7 @@
    }
 
    public static function findByUserIdAndImages($user_id) {
-     $db =self::getDb();
+     $db = self::getDb();
      $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.deleted = 0 AND products.status = 1 AND  products.vendor = " .$user_id;
      return $db->query($sql)->results();
    }

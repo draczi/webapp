@@ -14,7 +14,6 @@
       <h3 class="text-center">Bejelentkezés</h3>
       <?=FH::inputBlock('text', 'Felhasználó név', 'username', $this->login->username, ['class'=>'form-control'], ['class'=>'form-group'], $this->displayErrors) ?>
       <?=FH::inputBlock('password', 'Jelszó', 'password', $this->login->password, ['class'=>'form-control'], ['class'=>'form-group']) ?>
-      <?=FH::checkboxBlock('Emlékezz rám!', 'remember_me', $this->login->getRememberMeChecked(),[],['class'=>'form-group']); ?>
       <?=FH::submitBlock('Bejelentkezés', ['class'=>'btn btn-large btn-primary'],['class'=>'form-group']) ?>
       <div class="text-right">
          <a href="<?=PROOT?>register/resetPassword" class="text-primary" style="margin-right: 20px">Elfelejtett jelszó</a>

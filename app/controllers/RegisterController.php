@@ -28,8 +28,7 @@ class RegisterController extends Controller {
                 $user = Users::findByUsername($_POST['username']);
                 if($user && password_verify($this->request->get('password'), $user->password)) {
                     $user->belepesDate($user->id);
-                    $remember = $loginModel->getRememberMeChecked();
-                    $user->login($remember);
+                    $user->login();
                     Router::redirect('');
                 }  else {
                     $loginModel->addErrorMessage('username','There is an error with your username or password');

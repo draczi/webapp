@@ -9,12 +9,8 @@ class Login extends Model {
   protected static $_table = 'tmp_fake';
 
   public function validator(){
-    $this->runValidation(new RequiredValidator($this,['field'=>'username','msg'=>'Username is required.']));
-    $this->runValidation(new RequiredValidator($this,['field'=>'password','msg'=>'Password is required.']));
+    $this->runValidation(new RequiredValidator($this,['field'=>'username','msg'=>'Nem adott meg a felhasználónevet.']));
+    $this->runValidation(new RequiredValidator($this,['field'=>'password','msg'=>'Nem adott meg a jelszavat.']));
   }
 
-  public function getRememberMeChecked(){
-    return $this->remember_me == 'on';
-  }
- 
 }

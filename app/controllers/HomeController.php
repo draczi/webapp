@@ -10,6 +10,7 @@
   class HomeController extends Controller{
 
       public function indexAction() {
+         //Products::activeProducts();
           $search = $this->request->get('search');
           $min_price = $this->request->get('min_price');
           $max_price = $this->request->get('max_price');
