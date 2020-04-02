@@ -122,18 +122,15 @@
       $this->jsonResponse($resp);
     }
 
-    public function deleteAction() {
-      $resp = ['success' => false, 'msg' => "Something went wrong..."];
-      if($this->request->isPost()) {
-        $id = $this->request->get('id');
+    public function deleteAction($id) {
+
         $product = Products::findByIdAndUserId($id, $this->currentUser->id);
         if($product){
         //  ProductImages::deleteImages($id);
-          $product->delete();
-          $resp = ['success' => true, 'msg' => 'Product Deleted.','model_id' => $id];
+          $product->delete($product->id);
+          Session::addMsg('success', 'A terméket sikeresen törölted.');
         }
-      }
-      $this->jsonResponse($resp);
+       Router::redirect('hirdeteskezeles');
     }
 
 
