@@ -3,7 +3,6 @@
   use Core\Model;
   use Core\Validators\{RequiredValidator,NumericValidator};
   use Core\H;
-  use Core\Database;
 
  class Products extends Model {
 
@@ -39,8 +38,8 @@
    }
 
    public static function findByUserIdAndImages($user_id) {
-     $db = Database::getInstance();
-     $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.deleted = 0 AND  products.vendor = " .$user_id;
+     $db =self::getDb();
+     $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.deleted = 0 AND products.status = 1 AND  products.vendor = " .$user_id;
      return $db->query($sql)->results();
    }
 
@@ -52,11 +51,11 @@
      return self::findFirst($conditions);
    }
 
-   public static function allProducts($options) {
-    $db = Database::getInstance();
+   public static function allProducts($options, $admin = false) {
+    $db = self::getDb();
     $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
     $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
-    $where = "products.deleted = 0 AND pi.sort = '0'";
+    $where = "status = 1 AND products.deleted = 0 AND pi.sort = '0'";
     $binds = [];
     if(array_key_exists('search',$options) && !empty($options['search'])) {
       $where .= " AND (products.product_name LIKE ? OR categories.category_name LIKE ?)";
@@ -94,16 +93,14 @@
   }
 
   public static function auctionEndSold($user_id) {
-    $db = Database::getInstance();
-    $now = date('Y-m-d H:i:s');
-    $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 1 AND  '.$now.' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
+    $db = self::getDb();
+    $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 1 AND status = 0 AND products.vendor = " .$user_id;
     return $db->query($sql)->results();
   }
 
   public static function auctionEndNotSold($user_id) {
-    $db = Database::getInstance();
-    $now = date('Y-m-d H:i:s');
-    $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 0 AND '$now' > products.auction_end AND products.deleted = 1 AND products.vendor = " .$user_id;
+    $db = self::getDb();
+    $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 0 AND status = 0 AND products.vendor = " .$user_id;
     return $db->query($sql)->results();
   }
 
@@ -120,6 +117,11 @@
       'bind' => [$this->id],
       'order' => 'sort'
     ]);
+  }
+
+  public static function activeProducts() {
+      $db = self::getDb();
+      $db->query("UPDATE products SET status = 0 WHERE auction_end < NOW()");
   }
 
 
