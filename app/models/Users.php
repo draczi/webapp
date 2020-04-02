@@ -18,7 +18,7 @@ use Core\H;
 class Users extends Model {
     protected static $_table='users';
     public static $currentLoggedInUser = null;
-    public $id,$username,$email,$password,$fname,$lname,$acl,$confirm, $login_date, $create_date;
+    public $id,$username,$email,$password,$fname,$lname,$acl=1,$confirm, $login_date, $create_date;
     public $address, $city, $state,$country, $zip_code, $phone, $mobile_phone, $producer_id;
     const blackListedFormKeys = ['id'];
 
