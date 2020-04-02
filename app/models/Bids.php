@@ -2,14 +2,14 @@
 namespace App\Models;
 use Core\Model;
 use Core\Validators\{RequiredValidator,NumericValidator,BidMinValidator,UniqueValidator};
-use Core\FH;
+use Core\H;
 use Core\Database;
 use Core\Session;
 use Core\Router;
 
 class Bids extends Model {
 
-    public $bid_id, $product_id, $user_id, $bid_date, $bid_amount, $deleted = 0, $min_bid_price;
+    public $id, $product_id, $user_id, $bid_date, $bid_amount, $deleted = 0, $min_bid_price;
     protected static $_table = "bids";
     protected static $_softDelete = true;
 
@@ -35,14 +35,9 @@ class Bids extends Model {
         ]);
     }
 
-    public static function bindDelete($bid_id) {
-        $db = Database::getInstance();
-        $db->query("UPDATE bids SET deleted = 1 WHERE bid_id =" .$bid_id);
-    }
-
     public static function findProductAndUserBind($product_id, $user_id) {
         return self::findFirst([
-            'column' => 'bid_id',
+            'column' => 'id',
             'conditions' => 'product_id = ? AND user_id = ? AND deleted = 0',
             'bind' => [$product_id, $user_id]
         ]);
