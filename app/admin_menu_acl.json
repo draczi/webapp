@@ -1,11 +1,8 @@
 {
   "Termékek" : {
     "Termék megjelenítés" : "adminproduct/index",
-    "separator" : "",
     "Új Termék" : "adminproduct/add"
   },
   "Kategória" : "adminCategories/index",
-  "Felhasználók" : "adminUsers/index",
-  "Bejelentkezés" : "register/login",
-  "Kijelentkezés" : "register/logout"
+  "Felhasználók" : "adminUsers/index"
 }

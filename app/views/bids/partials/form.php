@@ -1,8 +1,9 @@
 <?php use Core\FH; ?>
-<form action="../add" method="POST">
+<form action="../../bids/add" method="POST">
   <div class="input-group">
     <label class="sr-only" for="bid">Licit</label>
     <input type="hidden" name="product_id" value="<?=$this->product->id?>" />
+    <input type="hidden" name="vendor" value="<?=$this->product->vendor?>" />
     <input type="hidden" name="user_id" value="<?=$this->user->id?>"/>
     <input type="hidden" name="bid_incerement" value="<?=$this->product->bid_increment?>"/>
     <input type="hidden" name="min_bid_price" value="<?=(empty($this->bid)) ? ($this->product->price + $this->product->bid_increment)  : ($this->bid['bid'] + $this->product->bid_increment)?>"/>

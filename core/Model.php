@@ -93,6 +93,13 @@ class Model {
     return $resultsQuery;
   }
 
+  public static function findAll($params = []) {
+    $params = static::_fetchStyleParams($params);
+    $resultsQuery = static::getDb()->find(static::$_table, $params,static::class);
+    if(!$resultsQuery) return [];
+    return $resultsQuery;
+  }
+
   /**
    * Find the first object that matches the conditions
    * @method findFirst
@@ -106,6 +113,12 @@ class Model {
     return $resultQuery;
   }
 
+  public static function findAllFirst($params = []) {
+    $params = static::_fetchStyleParams($params);
+    $resultQuery = static::getDb()->findFirst(static::$_table, $params,static::class);
+    return $resultQuery;
+  }
+
   /**
    * Finds a row for this model by id
    * @method findById
@@ -114,6 +127,10 @@ class Model {
    */
   public static function findById($id) {
     return static::findFirst(['conditions'=>"id = ?", 'bind' => [$id]]);
+  }
+
+  public static function findAllById($id) {
+    return static::findAllFirst(['conditions'=>"id = ?", 'bind' => [$id]]);
   }
 
   /**
@@ -181,6 +198,12 @@ class Model {
       $deleted = static::getDb()->delete(static::$_table, $this->id);
     }
     return $deleted;
+  }
+
+  public function adminDelete() {
+          if($this->id == '' || !isset($this->id)) return false;
+           return static::getDb()->delete(static::$_table, $this->id);
+
   }
 
   /**

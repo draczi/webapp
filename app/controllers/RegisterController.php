@@ -31,7 +31,7 @@ class RegisterController extends Controller {
                     $user->login();
                     Router::redirect('');
                 }  else {
-                    $loginModel->addErrorMessage('username','There is an error with your username or password');
+                    $loginModel->addErrorMessage('username','A felhasználónév, jelszó páros nem megfelelő.');
                 }
             }
         }
@@ -65,27 +65,20 @@ class RegisterController extends Controller {
 
     public function contactAction() {
         $user = Users::currentUser();
-        $contact = Contacts::findByUserId($user->id);
-        if (empty($contact)) {
-            $contact = new Contacts();
-        }
         if($this->request->isPost()) {
             $this->request->csrfCheck();
             $user->assign($this->request->get(),Users::blackListedFormKeys);
             $user->confirm =$this->request->get('confirm');
+            $user->username = $user->username;
+            $user->email = $user->email;
+            $user->acl = $user->acl;
             if($user->save()){
-                if($this->request->get('address') != '' || $this->request->get('city') != '' || $this->request->get('country') != '' || $this->request->get('phone') != '' || $this->request->get('mobile_phone') != '' || $this->request->get('ostermelo_id') != '' || $this->request->get('adoszam') != '' || $this->request->get('zip_code') != '') {
-
-                    $contact -> assign($this->request->get());
-                    $contact->user_id = Model::getDb()->lastID();
-                    $contact->save();
-                }
+                Session::addMsg('success', 'Sikeresen megváltoztattad az adatokat!');
                 Router::redirect('/');
             }
         }
-        $this->view->acls = Users::getOptionForForm($new = true);
+        $this->view->acls = Users::getOptionAcls($new = true);
         $this->view->user = $user;
-        $this->view->contact = $contact;
         $this->view->displayErrors = $user->getErrorMessages();
         $this->view->render('register/contact');
     }
@@ -108,7 +101,7 @@ class RegisterController extends Controller {
         $this->view->render('register/passwordChange');
     }
 
-    public function resetPasswordAction($token = false) {
+    public function forgottenPasswordAction($token = false) {
         $errorMessage = array();
         $resetPassModel = new resetPassword();
         if(!$token) {
@@ -120,7 +113,7 @@ class RegisterController extends Controller {
                 if($resetPassModel->validationPassed()){
                     $user = Users::findByEmail($this->request->get('email'));
                     if($user) {
-                        $resetPassModel->token = $token = uniqid(md5(time())); // ez egy random token
+                        $resetPassModel->token = $token = $user->id.'?'.uniqid(md5(time())); // ez egy random token
                         if($resetPassModel->save()){
                             $to = $this->request->get('email');
                             $subject = "Password reset link";
@@ -146,7 +139,7 @@ class RegisterController extends Controller {
                 Session::addMsg('danger', 'Sajnálom ilyen link nem létezik.');
                 Router::redirect('');
             }
-            $user = Users::findUserById($userPass->id);
+            $user = Users::findById($userPass->id);
             if($this->request->isPost()) {
                 $this->request->csrfCheck();
                 $resetPassModel->assign($this->request->get());

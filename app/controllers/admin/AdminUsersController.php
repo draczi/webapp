@@ -1,22 +1,23 @@
 <?php
-  namespace App\Controllers\Admin;
-  use Core\Controller;
-  use Core\Model;
-  use Core\Session;
-  use Core\Router;
-  use Core\H;
-  use App\Models\Products;
-  use App\Models\ProductImages;
-  use App\Models\Users;
-  use App\Models\Contacts;
-  use App\Models\Categories;
+namespace App\Controllers\Admin;
+use Core\Controller;
+use Core\Model;
+use Core\Session;
+use Core\Router;
+use Core\H;
+use App\Models\Products;
+use App\Models\ProductImages;
+use App\Models\Users;
+use App\Models\Bids;
+use App\Models\Contacts;
+use App\Models\Categories;
 
 
-  class AdminUsersController extends Controller {
+class AdminUsersController extends Controller {
 
     public function onConstruct() {
-      $this->view->setLayout('admin');
-      $this->currentUser = Users::currentUser();
+        $this->view->setLayout('admin');
+        $this->currentUser = Users::currentUser();
     }
 
     public function indexAction() {
@@ -37,10 +38,8 @@
         $this->view->users = $users;
         $this->view->acl = $acl;
         $this->view->search = $search;
-        $this->view->hasFilters = Users::hasFilters($options);
-      $this->view->acls = Users::getOptionForForm();
-
-      $this->view->render('admin/adminUsers/index');
+        $this->view->acls = Users::getOptionAcls();
+        $this->view->render('admin/adminUsers/index');
     }
 
     public static function szotar($string) {
@@ -52,74 +51,46 @@
         return $acl_name;
     }
 
-    public function addAction() {
-        $newUser = new Users();
-        $newContact = new Contacts();
-        if($this->request->isPost()) {
-          $this->request->csrfCheck();
-          $newUser->assign($this->request->get(),Users::blackListedFormKeys);
-          $newUser->confirm =$this->request->get('confirm');
-          if($newUser->save()){
-              if($this->request->get('address') != '' || $this->request->get('city') != '' || $this->request->get('country') != '' || $this->request->get('phone') != '' || $this->request->get('mobile_phone') != '' || $this->request->get('ostermelo_id') != '' || $this->request->get('adoszam') != '' || $this->request->get('zip_code') != '') {
-
-                $newContact -> assign($this->request->get());
-                $newContact->user_id = Model::getDb()->lastID();
-                $newContact->save();
-              }
-              Router::redirect('admin/adminUsers/index');
-          }
+    public function deleteAction(){
+        $resp = ['success'=>false,'msg'=>'Valami nincs rendben...'];
+        if($this->request->isPost()){
+            $id = $this->request->get('id');
+            $user = Users::findById($id);
+            $product = Products::findByUserId($user->id);
+            $bids = Bids::findUserBid($user->id);
+            if ($product || $bids) {
+                $resp = ['success' => false, 'msg' => 'a felhasználót nem lehet törölni.','model_id' => $id];
+                $this->jsonResponse($resp);
+            } else if ($this->currentUser->id == $user->id) {
+                $resp = ['success' => false, 'msg' => 'A saját fiókod nem törölheted!','model_id' => $id];
+                $this->jsonResponse($resp);
+            }
+            if($user){
+                if($product) Products::deleteProducts($user->id);
+                $user->delete();
+                $resp = ['success' => true, 'msg' => 'A felhasználó törölve lett.','model_id' => $id];
+            }
         }
-        $acl = $this->request->get('acl');
-        $this->view->acls = Users::getOptionForForm($new = true);
-        $this->view->acl = $acl;
-        $this->view->formAction = PROOT . 'adminUsers/add';
-        $this->view->newUser = $newUser;
-        $this->view->newContact = $newContact;
-        $this->view->displayErrors = $newUser->getErrorMessages();
-        $this->view->render('admin/adminUsers/add');
-    }
-
-    public function deleteAction() {
-      $resp = ['success' => false, 'msg' => "Something went wrong..."];
-      if($this->request->isPost()) {
-        $id = $this->request->get('id');
-        $product = Products::findByIdAndUserId($id, $this->currentUser->id);
-        if($product) {
-        //  ProductImages::deleteImages($id, true);
-          $product->delete();
-          $resp = ['success' => true, 'msg' => 'Product Deleted.', 'model_id' => $id];
-        }
-      }
-      $this->jsonResponse($resp);
+        $this->jsonResponse($resp);
     }
 
     public function editAction($id) {
-     $user = Users::findById($id);
-     $contact = Contacts::findByUserId($id);
-     if (empty($contact)) {
-         $contact = new Contacts();
-     }
-     if($this->request->isPost()) {
-       $this->request->csrfCheck();
-       $user->assign($this->request->get(),Users::blackListedFormKeys);
-       $user->confirm =$this->request->get('confirm');
-       if($user->save()){
-           if($this->request->get('address') != '' || $this->request->get('city') != '' || $this->request->get('country') != '' || $this->request->get('phone') != '' || $this->request->get('mobile_phone') != '' || $this->request->get('ostermelo_id') != '' || $this->request->get('adoszam') != '' || $this->request->get('zip_code') != '') {
-
-             $newContact -> assign($this->request->get());
-             $newContact->user_id = Model::getDb()->lastID();
-             $newContact->save();
-           }
-           Router::redirect('adminUsers/index');
-       }
-     }
-      $acl = $this->request->get('acl');
-      $this->view->acls = Users::getOptionForForm($new = true);
-      $this->view->acl = $acl;
-      $this->view->user = $user;
-      $this->view->contact = $contact;
-      $this->view->displayErrors = $user->getErrorMessages();
-      $this->view->render('admin/adminUsers/edit');
+        $user = Users::findById($id);
+        if($this->request->isPost()) {
+            $this->request->csrfCheck();
+            $user->assign($this->request->get(),Users::blackListedFormKeys);
+            $user->confirm =$this->request->get('confirm');
+            if($user->save()){
+                Session::addMsg('success', 'Sikeresen megváltoztattad ' .$user->username . ' adatait.');
+                Router::redirect('adminUsers');
+            }
+        }
+        $acl = $this->request->get('acl');
+        $this->view->acls = Users::getOptionAcls($new = true);
+        $this->view->acl = $acl;
+        $this->view->user = $user;
+        $this->view->displayErrors = $user->getErrorMessages();
+        $this->view->render('admin/adminUsers/edit');
     }
 
-  }
+}

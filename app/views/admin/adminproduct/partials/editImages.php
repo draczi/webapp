@@ -28,7 +28,6 @@
     color: #aa0000;
   }
 </style>
-
 <div id="sortableImages" class="row align-items-center justify-content-start p-2">
       <?php foreach($this->images as $image) : ?>
         <div class="col flex-grow-0" style ="position:relative; margin-bottom: 20px;"id="image_<?=$image->id?>">
@@ -46,21 +45,23 @@ function updateSort() {
   $('#images_sorted').val(JSON.stringify(sortedIDs));
 }
 
-function deleteImage(image_id) {
-  if(confirm("Are you sure? This cannot be undone!")) {
-    jQuery.ajax({
-      url : '<?=PROOT?>hirdeteskezeles/deleteImage',
-      method : 'POST',
-      data : {image_id : image_id},
-      success: function(resp) {
-        if(resp.success) {
-          jQuery('#image_'+resp.model_id).remove();
-          updateSort();
-        }
-      }
-    });
+function deleteImage(id){
+     if(window.confirm("Biztos, hogy törölni szeretnéd a képet?")){
+      jQuery.ajax({
+        url : '<?=PROOT?>adminproduct/deleteImage',
+        method : "POST",
+        data : {id : id},
+        success: function(resp){
+            var msgType = (resp.success)? 'success' : 'danger';
+            if(resp.success){
+                jQuery('#image_'+resp.model_id).remove();
+              updateSort();
+            }
+            alertMsg(resp.msg, msgType);
+          }
+      });
+    }
   }
-}
 
 jQuery('document').ready(function(){
   jQuery("#sortableImages").sortable({

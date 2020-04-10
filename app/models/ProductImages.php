@@ -5,7 +5,7 @@
   use App\Models\Users;
 
   class ProductImages extends Model {
-    public $id, $url, $product_id,$name,$sort,  $deleted = 0;
+    public $id, $url, $product_id,$sort;
 
     protected static $_table = "product_images";
 
@@ -13,18 +13,19 @@
       $files = self::restructureFiles($images);
       $errors = [];
       $maxSize = 5242880;
-      $allowedTypes = [IMAGETYPE_GIF,IMAGETYPE_JPEG,IMAGETYPE_PNG];
+      $allowedTypes = [IMAGETYPE_GIF,IMAGETYPE_JPEG,IMAGETYPE_PNG]; //H::dnd($files);
+      if ($files[0]['name'] == '') return $errors[] = ["1" => "Legalább 1 képet töltsön fel a termékhez."];
       foreach($files as $file) {
         $name = $file['name'];
 
         //check filesize
         if($file['size'] > $maxSize) {
-          $errors[$name] = $name . " is over the max allowed size of 5MB";
+          $errors[$name] = $name . " mérete maximum 5MB lehet.";
         }
 
         // checking file type
         if(!in_array(exif_imagetype($file['tmp_name']),$allowedTypes)) {
-          $errors[$name] = $name . " is not an allowed file type. Please use a jpeg, gif or png";
+          $errors[$name] = $name . " nem megfelelő típusú. Kérem .jpg, .png, .gif kiterjesztésű fájlt töltsön fel.";
         }
       }
       return (empty($errors)) ? true : $errors;
@@ -75,7 +76,7 @@
       $images = self::find([
         'conditions' => "product_id = ? ",
         'bind' => [$product_id]
-      ]);
+    ]);
       foreach($images as $image) {
         $image->delete();
       }
@@ -83,7 +84,6 @@
         $dirname = ROOT. DS . 'uploads' . DS . 'product_images' . DS . 'product_' . $product_id;
         array_map('unlink', glob("$dirname/*.*"));
         rmdir($dirname);
-        unlink(ROOT. DS . 'uploads' . DS . 'product_images' . DS . 'product_' . $product_id);
 
       }
     }
@@ -94,12 +94,12 @@
       $afterImages = self::find([
         'conditions' => "product_id = ? and sort > ?",
         'bind' => [$image->product_id, $sort]
-      ]);
+    ]);
       foreach($afterImages as $af) {
         $af->sort = $af->sort -1;
         $af=save();
-      }
-      unlink(ROOT.DS.'uploads'.DS.'product_images'.DS.'product_'.$image->product_id.DS.$image->url);
+    }
+      unlink(ROOT.DS.$image->url);
       return $image->delete();
     }
     public static function findByProductId($product_id) {

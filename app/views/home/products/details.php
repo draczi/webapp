@@ -4,10 +4,12 @@
     use App\Controllers\ProductsController;
     use Core\Database;
 ?>
-<?php $this->setSiteTitle($this->product->name); ?>
+<?php $this->setSiteTitle($this->product->product_name); ?>
 <?php $this->start('body'); ?>
+<h4 class="details-backhomepage"><i class="fas fa-chevron-double-left"></i><a href="<?=PROOT?>"> Vissza a Főoldalra</a></h4>
 <div class="details-container">
-  <h1><?=$this->product->name?></h1>
+
+  <h1><?=$this->product->product_name?></h1>
   <div class="row">
     <div class="col-md-6">
       <!-- slideshow -->
@@ -24,7 +26,7 @@
           $active = ($i == 0)? " active" : "";
           ?>
           <div class="carousel-item<?=$active?>">
-            <img src="<?= PROOT.$this->images[$i]->url?>" class="d-block image-fluid" style="width: 350px; height:300px;margin:0 auto;" alt="<?=$this->product->name?>">
+            <img src="<?= PROOT.$this->images[$i]->url?>" class="d-block image-fluid" style="width: 350px; height:300px;margin:0 auto;" alt="<?=$this->product->product_name?>">
           </div>
         <?php endfor;?>
       </div>
@@ -49,8 +51,7 @@
     <div class="details-box col-md-6">
       <div class="licit-box col-md-12">
         <div class="actual-price"><img src="<?=PROOT?>css/images/licit-hammer-icon.jpg" /><p>Jelenlegi ár: <span><?= (!empty($this->bid)) ? $this->bid['bid'] : $this->product->price ?></span> Ft</p></div>
-        <p class="min_price">Nincs minimál ár meghatározva</p>
-        <p class="bid-increment">Licitlépcső: <span class="licit"><?=$this->product->bid_increment ?></span> <span class="min_licit_price">( Minimum ajánlat:  <?= (empty($this->bid)) ? ($this->product->price + $this->product->bid_increment)  : ($this->bid['bid'] + $this->product->bid_increment)  ?>  Ft  )</span></p>
+        <p class="bid-increment">Licitlépcső: <span class="licit"><?=($this->product->bid_increment != 0)?$this->product->bid_increment : 'Nincs meghatározva'; ?></span> <span class="min_licit_price">( Minimum ajánlat:  <?= (empty($this->bid)) ? ($this->product->bid_increment != 0) ?  ($this->product->price + $this->product->bid_increment) : $this->product->price +1 : ($this->bid['bid'] + $this->product->bid_increment)  ?>  Ft  )</span></p>
     <div>
         <div id="bids">
       <?php  ($this->user) ? $this->partial('bids', 'form') :   print('<p style="color: #17a2b8; margin-top: 20px">A licitáláshoz kérlek jelentkezz be!</p>') ; ?>
@@ -70,7 +71,7 @@
             <p>Kikiáltási ár</p>
           </div>
           <div class="col-md-7">
-            <p><?= $this->product->created_at ?></p>
+            <p><?= $this->product->create_date ?></p>
             <p><?=$this->product->quantity ?></p>
             <p>Áru helye</p>
             <p> <?= date_format(date_create($this->product->auction_end), "Y-m-d"); ?>
@@ -99,13 +100,52 @@
         <?= $this->product->description ?>
       </div>
   </div>
+  <div class="messages col-12 col-md-11">
+      <button id="add-message">Kérdezek</button>
+      <span id="msg-cancel"><i class="fal fa-times-circle " style="font-size: 30px; cursor: pointer;"></i></span>
+      <div class="message_panel" id="message_panel">
+         <h4>Tedd fel kérdésed a termékkel kapcsolatban</h4>
+         <?= $this->partial('home/products', 'messages_form') ?>
+      </div>
+      <h3>Üzenetek</h3>
+      <?php if (!empty($this->messages)) : ?>
+
+      <?php foreach($this->messages as $message) : ?>
+      <div class="mess">
+        <h4 class="messages-info"><?= $message->username?> írta. Üzenet időpontja: <?=$message->create_date?></h4>
+        <?= $message->message?>
+      </div>
+  <?php endforeach ?>
+<?php elseif (empty($this->messages)) :  ?>
+      <div class="mess">
+
+        Még tettem fel kérdést a termékkel kapcsolatban.
+      </div>
+  <?php endif ?>
+  </div>
   </div>
 </div>
 
 <script>
 setTimeout(function() {
   location.reload();
-}, 30000);
+}, 240000);
+
+$(document).ready(function(){
+	$("#message_panel").hide();
+	$("#msg-cancel").hide();
+  $("#add-message").click(function(){
+	$("#add-message").hide();
+    $("#message_panel").show();
+    $("#msg-cancel").show();
+  });
+
+  $("#msg-cancel").click(function(){
+	$("#add-message").show();
+    $("#message_panel").hide();
+    	$("#msg-cancel").hide();
+  });
+   });
 </script>
 
 

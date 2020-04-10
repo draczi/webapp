@@ -2,17 +2,18 @@
 
   namespace App\Models;
   use Core\Model;
-  use Core\Validators\{RequiredValidator,UniqueValidator};
+  use Core\Validators\{RequiredValidator,UniqueValidator,NumMinValidator};
   use Core\H;
   use Core\Database;
 
   class Categories extends Model {
-    public $id, $category_name, $parent;
+    public $id, $category_name, $parent = NULL;
     protected static $_table = "categories";
 
     public function validator() {
       $this->runValidation(new RequiredValidator($this,['field' => 'category_name', 'msg' => 'Kérlek adj meg egy kategória nevet.']));
       $this->runValidation(new UniqueValidator($this,['field' => ['category_name'],'msg' => 'Ez a kategória már létezik.']));
+      $this->runValidation(new NumMinValidator($this,['field'=>'parent','rule'=>1,'msg'=>'Kérlek válassz egy kategóriát.']));
     }
 
     public static function allCategories() {
@@ -20,16 +21,9 @@
       return $db-> query("SELECT * FROM categories")->results();
     }
 
-    public static function categoryId($category_id) {
+    public static function findParentById($category_id) {
       return self::findFirst([
-        'conditions' => 'id = ?',
-        'bind' => [$category_id],
-      ]);
-    }
-
-    public static function getCategoryName($category_id) {
-    return self::findFirst([
-        'condition' => 'id = ?',
+        'conditions' => 'parent = ?',
         'bind' => [$category_id],
       ]);
     }
@@ -52,7 +46,7 @@
         'columns' => 'id, category_name',
         'order' => 'category_name'
       ]);
-      $categoriesAry = ['0' =>'Összes kategória'];
+      $categoriesAry = ['0' =>'Válasszon egy kategóriát'];
       foreach($categories as $category) {
         $categoriesAry[$category->id] = $category->category_name;
       }

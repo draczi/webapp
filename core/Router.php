@@ -10,7 +10,6 @@
     public static function route($url) {
 
       //controller
-      //
       $controller = (isset($url[0]) && $url[0] != '') ? ucwords($url[0]).'Controller' : DEFAULT_CONTROLLER.'Controller';
       $controller_name = str_replace('Controller','',$controller);
       array_shift($url);
@@ -59,16 +58,11 @@
       $acl = json_decode($acl_file, true);
       $current_user_acls = ["Guest"];
       $grantAccess = false;
-
       if(Session::exists(CURRENT_USER_SESSION_NAME)) {
-        // foreach(Users::currentUser()->acls() as $a) {
-        //   $current_user_acls[] = $a;
-        // }
         if($user = Users::currentUser()->acls()) {
           $current_user_acls[] = $user;
         }
       }
-
       foreach($current_user_acls as $level) {
         if(array_key_exists($level, $acl) && array_key_exists($controller_name, $acl[$level])) {
           if(in_array($action_name, $acl[$level][$controller_name]) || in_array("*", $acl[$level][$controller_name])) {
@@ -77,7 +71,6 @@
           }
         }
       }
-
       //check for denied
       foreach($current_user_acls as $level) {
         $denied = $acl[$level]['denied'];

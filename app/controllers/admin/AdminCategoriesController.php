@@ -2,6 +2,7 @@
   namespace App\Controllers\Admin;
   use Core\Controller;
   use App\Models\Users;
+  use App\Models\Products;
   use App\Models\Categories;
   use Core\H;
   use Core\Session;
@@ -17,15 +18,7 @@
     }
 
     public function indexAction() {
-      $categories = Categories::allCategories();
-
-      $this->view->categories = $categories;
-      //$this->view->formErrors = $brand->getErrorMessages();
-    //  $categories = Categories::getCategoryParentForForm();
-      //$this->view->categories = $categories; //H::dnd($this->view->categories);
-      //$this->view->formErrors = $brand->getErrorMessages();
-    //  $this->view->brands = Brands::find(['order'=>'name']);
-
+      $this->view->categories = Categories::allCategories();
       $this->view->render('admin/adminCategories/index');
     }
 
@@ -48,17 +41,10 @@
     }
 
     public function editAction($id) {
-
-      $categories = Categories::categoryId((int)$id);
-      if(!$categories) {
-        Session::addMsg('danger', 'Nincs jogod módosítani a kategóriát.');
-        Router::redirect('adminCategories');
-      }
+      $categories = Categories::findById((int)$id);
       if($this->request->isPost()) {
         $this->request->csrfCheck();
         $categories->assign($this->request->get());
-        $db = Database::getInstance();
-      //  $db->query("UPDATE categories SET category_name = '{$categories->category_name}', parent_id = '{$categories->parent_id}' where id = " .$categories->id);
         $categories->save();
         if($categories->validationPassed()) {
           Session::addMsg('success', 'Sikeresen módosítottad a kategóriát.');
@@ -71,6 +57,22 @@
       $this->view->render('admin/adminCategories/edit');
     }
 
-
-
+    public function deleteAction(){
+        $resp = ['success'=>false,'msg'=>'Valami nincs rendben...'];
+        if($this->request->isPost()){
+            $id = $this->request->get('id');
+            $category = Categories::findById($id);
+            $products = Products::findByCategory($category->id);
+            $parent = Categories::findParentById($id);
+            if($products || $parent) {
+                $resp = ['success' => false, 'msg' => 'A kategória nem törölhető!', 'model_id' => $id];
+                $this->jsonResponse($resp);
+            }
+            if($category){
+                $category->delete();
+                $resp = ['success' => true, 'msg' => 'A kategória törölve lett.','model_id' => $id];
+            }
+        }
+        $this->jsonResponse($resp);
+    }
   }

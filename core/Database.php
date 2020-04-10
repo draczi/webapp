@@ -37,7 +37,7 @@ class Database {
       if($this->_query->execute()) {
          if($class && $this->_fetchStyle === PDO::FETCH_CLASS){
            $this->_result = $this->_query->fetchAll($this->_fetchStyle,$class);
-         } else {
+       } else {
            $this->_result = $this->_query->fetchAll($this->_fetchStyle);
          }
          $this->_count = $this->_query->rowCount();

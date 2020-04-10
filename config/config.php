@@ -3,7 +3,7 @@
   define('DEBUG', true);
 
   //adatbázis kapcsolat adatai
-  define('DB_NAME', 'auction'); // adatbázis neve
+  define('DB_NAME', 'diploma'); // adatbázis neve
   define('DB_USER', 'root'); // adatbázis felhasználói név
   define('DB_PASSWORD', ''); // adatbázis jelszó
   define('DB_HOST', '127.0.0.1'); // adatbázis elerhetősége

@@ -1,9 +1,9 @@
 {
   "Hirdetéskezelés" : {
-    "Hirdetések" : "hirdeteskezeles/index",
+    "Hirdetések" : "products/index",
     "separator" : "",
-    "Hirdetésfeladás" : "hirdeteskezeles/add",
-    "Lezártárverések" : "hirdeteskezeles/lezartarveresek"
+    "Hirdetésfeladás" : "products/add",
+    "Lezártárverések" : "products/closedAuction"
 
  },
   "Admin" : "admindashboard/index"

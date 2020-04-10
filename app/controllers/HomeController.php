@@ -21,7 +21,7 @@
           $options = [
               'search'=>$search, 'min_price' => $min_price, 'max_price' => $max_price, 'category' =>  $category, 'limit' => $limit, 'offset' => $offset
           ];
-          $results = Products::allProducts($options); //H::dnd($results);
+          $results = Products::allProducts($options); 
           $products = $results['results'];
           $total = $results['total'];
           $this->view->page = $page;
@@ -31,7 +31,6 @@
           $this->view->max_price = $max_price;
           $this->view->category = $category;
           $this->view->search = $search;
-          $this->view->hasFilters = Products::hasFilters($options);
           $this->view->categoryOptions = Categories::getOptionForForm();
           $this->view->render('home/index');
       }

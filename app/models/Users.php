@@ -31,26 +31,36 @@ class Users extends Model {
         foreach($requiredFields as $field => $display) {
           $this->runValidation(new RequiredValidator($this, ['field' => $field, 'msg' => "Kérlek add meg " .$display]));
         }
+        if ($this->isNew()) {
+            $this->runValidation(new UniqueValidator($this,['field'=>['username'],'msg'=>'Ez a felhasználónév foglalt.']));
+            $this->runValidation(new UniqueValidator($this,['field'=>['email'],'msg'=>'Ez az e-mail cím már regisztrálva van.']));
+        }
         $this->runValidation(new EmailValidator($this, ['field'=>'email','msg'=>'Nem megfelelő e-mail címet adtál meg.']));
         $this->runValidation(new MaxValidator($this,['field'=>'email','rule'=>150,'msg'=>'Az e-mail cím maximum 150 karaterből állhat.']));
         $this->runValidation(new MinValidator($this,['field'=>'username','rule'=>5,'msg'=>'A felhasználónév minimum 5 karakterből állhat.']));
         $this->runValidation(new MaxValidator($this,['field'=>'username','rule'=>150,'msg'=>'A felhasználónév maximum 5 karakterből állhat.']));
-        $this->runValidation(new UniqueValidator($this,['field'=>['username'],'msg'=>'Ez a felhasználónév foglalt.']));
-        $this->runValidation(new UniqueValidator($this,['field'=>['email'],'msg'=>'Ez az e-mail cím már regisztrálva van.']));
+
         $this->runValidation(new MatchesValidator($this,['field'=>'password','rule'=>$this->confirm,'msg'=>"A megadott jelszavak nem egyeznek."]));
         $this->runValidation(new MinValidator($this,['field'=>'password','rule'=>5,'msg'=>'A jelszónak minimum 5 karakterből kell állnia.']));
 
     }
     public function beforeSave(){
         $this->timeStamps();
-        if ($this->isNew()) {
-            $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-        }
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
     }
 
     public static function findByUsername($username) {
         return self::findFirst(['conditions'=> "username = ?", 'bind'=>[$username]]);
     }
+
+
+        public static function findByEmail($email) {
+            return self::findFirst([
+                'column' => 'email',
+                'conditions' => 'email = ?',
+                'bind' => [$email]
+            ]);
+        }
 
     public static function currentUser() {
         if(!isset(self::$currentLoggedInUser) && Session::exists(CURRENT_USER_SESSION_NAME)) {
@@ -78,56 +88,14 @@ class Users extends Model {
         return $sql[0]->acl;
     }
 
-    public static function addAcl($user_id,$acl){
-        $user = self::findById($user_id);
-        if(!$user) return false;
-        $acls = $user->acls();
-        if(!in_array($acl,$acls)){
-            $acls[] = $acl;
-            $user->acl = json_encode($acls);
-            $user->save();
-        }
-        return true;
-    }
-
-    public static function removeAcl($user_id, $acl){
-        $user = self::findById($user_id);
-        if(!$user) return false;
-        $acls = $user->acls();
-        if(in_array($acl,$acls)){
-            $key = array_search($acl,$acls);
-            unset($acls[$key]);
-            $user->acl = json_encode($acls);
-            $user->save();
-        }
-        return true;
-    }
-
     public function belepesDate($user_id) {
-        $user = self::findById($user_id);
+        $db = self::getDb();
         $date = date('Y-m-d H:i:s');
-        $user->login_date = $date;
-        $user->save();
-        return true;
+        return $db->query("UPDATE users SET login_date = '".$date."' WHERE id = '".$user_id."' ");
     }
 
-    public static function findUserById($user_id) {
-        return self::findFirst([
-            'conditions' => 'id = ?',
-            'bind' => [$user_id]
-        ]);
-    }
-
-    public static function findByEmail($email) {
-        return self::findFirst([
-            'column' => 'email',
-            'conditions' => 'email = ?',
-            'bind' => [$email]
-        ]);
-    }
-
-    public static function getOptionForForm($new=false) {
-        $db = Database::getInstance();
+    public static function getOptionAcls($new=false) {
+        $db = self::getDb();
         $acls = $db->query("SELECT acl_id, user_level FROM acls")->results();
         $aclsAry = ['0' =>' Összes'];
         if ($new==true) $aclsAry = [];
@@ -137,7 +105,7 @@ class Users extends Model {
         return $aclsAry;
     }
     public static function allUsers($options) {
-        $db = Database::getInstance();
+        $db =self::getDb();
         $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
         $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
         $where = 'create_date < NOW()';
@@ -168,16 +136,10 @@ class Users extends Model {
         return ['results' => $results, 'total' => $total];
     }
 
-    public static function modifyPassword($id, $password) {
-        $db = Database::getInstance();
+    public static function changePassword($id, $password) {
+        $db = self::getDb();
         $query = "UPDATE users SET `password` = '".$password."' WHERE `id` = '".$id ."' LIMIT 1 " ; H::dnd( $db->query($query));
         $result = $db->query($query);
     }
 
-    public static function hasFilters($options){
-        foreach($options as $key => $value){
-            if(!empty($value) && $key != 'limit' && $key != 'offset') return true;
-        }
-        return false;
-    }
 }
