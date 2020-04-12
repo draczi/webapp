@@ -138,7 +138,7 @@ class Users extends Model {
 
     public static function changePassword($id, $password) {
         $db = self::getDb();
-        $query = "UPDATE users SET `password` = '".$password."' WHERE `id` = '".$id ."' LIMIT 1 " ; H::dnd( $db->query($query));
+        $query = "UPDATE users SET `password` = '".$password."' WHERE `id` = '".$id ."' LIMIT 1 ";
         $result = $db->query($query);
     }
 

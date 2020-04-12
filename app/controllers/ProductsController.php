@@ -18,6 +18,7 @@
         $this->view->setLayout('default');
         $this->currentUser = Users::currentUser();
       }
+
       public function indexAction() {
         $this->view->users = $this->currentUser->id;
         $this->view->products = Products::findByUserIdAndImages($this->currentUser->id);
@@ -159,7 +160,7 @@
       $min_price = $product->price + $product->bid_increment;
 
      if(!$product) {
-       Session::addMsg('danger', "Ooops a Termék nem elérhető!!!");
+       Session::addMsg('danger', "Ooops a Termék már elérhető! Valószínű lejárt az árverés.");
        Router::redirect('home');
      }
 

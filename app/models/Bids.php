@@ -2,11 +2,12 @@
 namespace App\Models;
 use Core\Model;
 use Core\Validators\{RequiredValidator,NumericValidator,NumMinValidator,UniqueValidator,DontMatchesValidator};
+use Core\H;
 
 
 class Bids extends Model {
 
-    public $id, $product_id, $user_id, $bid_date, $bid_amount, $deleted = 0, $min_bid_price, $vendor;
+    public $id, $product_id, $user_id, $bid_date, $bid_amount, $deleted = 0, $min_bid_price, $vendor, $auction_end;
     protected static $_table = "bids";
     protected static $_softDelete = true;
 
@@ -19,7 +20,8 @@ class Bids extends Model {
         $this->runValidation(new NumericValidator($this, ['field' => 'bid_amount', 'msg' => 'Licitként csak számot adhat meg!']));
         $this->runValidation(new RequiredValidator($this, ['field' => 'bid_amount', 'msg' => 'Kérlek adj meg egy licitet.']));
         $this->runValidation(new DontMatchesValidator($this, ['field' => 'user_id', 'rule' => $this->vendor, 'msg' => 'A saját termékére nem licitálhat.']));
-        $this->runValidation(new NumMinValidator($this,['field'=>'bid_amount','rule'=>$this->min_bid_price,'msg'=>'Licited a minimum alatt van! Kérlek adj meg egy összeget legalább ' . $this->min_bid_price . ' Ft értékben.']));
+        //$this->runValidation(new NumMinValidator($this,['field'=>'bid_amount','rule'=>$this->min_bid_price,'msg'=>'Licited a minimum alatt van! Kérlek adj meg egy összeget legalább ' . $this->min_bid_price . ' Ft értékben.']));
+        $this->runValidation(new NumMinValidator($this,['field'=>'auction_end','rule'=>date('Y-m-d H:m:s'),'msg'=>'Az aukció lezárult! Sajnos a licited nem érvényes.']));
     }
 
     public static function findProductBid($product_id) {

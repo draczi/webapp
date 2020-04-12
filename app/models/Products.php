@@ -142,9 +142,18 @@ class Products extends Model {
         ]);
     }
 
-    public static function activeProducts() {
-        $db = self::getDb();
-        $db->query("UPDATE products SET status = 0 WHERE auction_end < NOW()");
+    public static function closedAuctions() {
+        $inaktivProducts = array();
+        $products = self::find([
+            'conditions' => 'status = 1 AND auction_end < NOW()'
+        ]);
+        foreach($products as $product) {
+             ($bid = Bids::findProductBid($product->id)) ? $product->sold = 1 : $product->sold;
+             if($bid) $inaktivProducts[] = array('product_id' => $product->id, 'customer' => $bid->user_id);
+             $product->status = 0;
+             $product->save();
+        }
+        return $inaktivProducts;
     }
 
     public static function deleteProducts($user_id) {

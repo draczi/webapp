@@ -1,7 +1,7 @@
 <?php
 namespace Core\Validators;
 use Core\Validators\CustomValidator;
-use Core\FH;
+use Core\H;
 
 class NumMinValidator extends CustomValidator {
 

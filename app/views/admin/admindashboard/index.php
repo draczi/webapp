@@ -1,3 +1,3 @@
 <?php $this->start('body') ?>
-<h1>Admin Dashboard</h1>
+<h1 class="text-center">Admin Főoldal</h1>
 <?php $this->end() ?>

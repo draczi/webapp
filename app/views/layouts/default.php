@@ -23,12 +23,13 @@
   </head>
   <body>
     <?php include 'main_menu.php' ?>
-    <div class="container-fluid" type="min-height: cal(100% - 125px);">
+    <div class="container-fluid" type="min-height: cal(100% - 125px);" style="min-height: 73vh;">
 
     <?= Session::displayMsg() ?>
 
     <?=$this->content('body'); ?>
-
+</div>
+    <footer><i class="fal fa-copyright"></i> Drácz István Mezőgazdasági Auckciós Portál</footer>
   </body>
 
 </html>

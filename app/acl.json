@@ -2,13 +2,13 @@
   "Guest" : {
     "denied" : {},
     "Home" : ["*"],
-    "Register" : ["login", "register", "resetPassword"],
+    "Register" : ["login", "register", "forgottenPassword", "passwordChange"],
     "Products" : ["details"],
     "Restricted" : ["*"]
   },
   "Registered" : {
     "denied" : {
-      "Register" : ["login", "register", "resetPassword"]
+      "Register" : ["login", "register"]
     },
     "Register" : ["logout", "contact"],
     "Products" : ["details"],
@@ -16,14 +16,14 @@
   },
   "Seller" : {
     "denied" : {
-      "Register" : ["login", "register", "resetPassword"]
+      "Register" : ["login", "register"]
     },
     "Register" : ["logout", "contact"],
     "Products" : ["*"]
   },
   "Administrator" : {
     "denied" : {
-        "Register" : ["login", "register", "resetPassword"]
+        "Register" : ["login", "register"]
     },
     "Register" : ["logout", "contact"],
     "Bids" : ["add"],
@@ -34,10 +34,5 @@
     "Products" : ["*"],
     "AdminUsers" : ["*"]
 
-  },
-  "SuperAdmin" : {
-    "denied" : {},
-    "Admin" : ["*"],
-    "Products" : ["*"]
   }
 }
