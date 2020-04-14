@@ -104,7 +104,7 @@ use Core\Database;
             </div>
         </div>
         <div class="messages col-12 col-md-11">
-            <button id="add-message">Kérdezek</button>
+            <?= (isset($this->user)) ? '<button id="add-message">Kérdezek</button>' : '' ?> 
             <span id="msg-cancel"><i class="fal fa-times-circle " style="font-size: 30px; cursor: pointer;"></i></span>
             <div class="message_panel" id="message_panel">
                 <h4>Tedd fel kérdésed a termékkel kapcsolatban</h4>
@@ -138,6 +138,7 @@ $(document).ready(function(){
     $("#message_panel").hide();
     $("#msg-cancel").hide();
     $("#add-message").click(function(){
+
         $("#add-message").hide();
         $("#message_panel").show();
         $("#msg-cancel").show();

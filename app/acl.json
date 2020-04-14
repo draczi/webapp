@@ -3,7 +3,7 @@
     "denied" : {},
     "Home" : ["*"],
     "Register" : ["login", "register", "forgottenPassword", "passwordChange"],
-    "Products" : ["details"],
+    "Products" : ["details", "addMessage"],
     "Restricted" : ["*"]
   },
   "Registered" : {
@@ -11,7 +11,7 @@
       "Register" : ["login", "register"]
     },
     "Register" : ["logout", "contact"],
-    "Products" : ["details"],
+    "Products" : ["details", "addMessage"],
     "Bids" : ["add"]
   },
   "Seller" : {

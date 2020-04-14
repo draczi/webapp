@@ -1,7 +1,7 @@
 <?php
   use Core\FH;
 ?>
-<form action="../add_message" method="POST" enctype="multipart/form-data">
+<form action="../addMessage" method="POST" enctype="multipart/form-data">
   <?= FH::csrfInput()?>
   <input type="hidden" name="product_id" value="<?=$this->product->id?>" />
   <input type="hidden" name="user_id" value="<?=$this->user->id?>"/>

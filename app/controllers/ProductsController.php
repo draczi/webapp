@@ -173,7 +173,7 @@
 
   }
 
-  public function add_messageAction() {
+  public function addMessageAction() {
       $msg = new Messages();
       if($this->request->isPost()) {
         $msg->assign($this->request->get());
