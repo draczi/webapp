@@ -2,7 +2,7 @@
   use Core\Router;
   use Core\FH;
   use App\Models\Users;
-  $menu = Router::getMenu('menu_acl');
+  $menu = Router::getMenu('menu');
   $userMenu = Router::getMenu('user_menu');
 ?>
 <nav class="navbar navbar-expand-lg sticky-top">

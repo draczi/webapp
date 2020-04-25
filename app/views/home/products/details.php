@@ -44,7 +44,7 @@ use Core\Database;
             <div class="vendor-info col-md-12">
                 <p><b>Eladó adatai</b></p>
                 <p>Felhasználó neve: <span><?= $this->vendor['vendor'] ?></span></p>
-                <p>Regisztráció időpontja: <span>2010-10-10</span></p>
+                <p>Regisztráció időpontja: <span><?= date_format(date_create($this->vendor['created_date']), "Y-m-d"); ?></span></p>
                 <p>Utolsó belépés: <span><?=$this->vendor['login_date']?></span></p>
 
             </div>
@@ -68,29 +68,26 @@ use Core\Database;
                         <p>Mennyiség</p>
                         <p>Áru helye</p>
                         <p>Aukció vége</p>
-                        <p>&nbsp;</p>
+                        <p style="margin-top: -10px">&nbsp;</p>
                         <p>Jelenlegi nyertes</p>
                         <p>Kikiáltási ár</p>
                     </div>
                     <div class="col-md-7">
-                        <p><?= $this->product->create_date ?></p>
-                        <p><?=$this->product->quantity ?></p>
-                        <p>Áru helye</p>
+                        <p><?= $this->product->created_date ?></p>
+                        <p><?=$this->product->quantity ?> kg</p>
+                        <p><?=$this->vendor['city']?></p>
                         <p>
                             <script>
                                 Product = "<?= $this->product->id ?>";
                                 TargetDate = "<?= $this->product->auction_end ?>";
-                                BackColor = "";
-                                ForeColor = "navy";
+                                ForeColor = "auction_end";
                                 CountActive = true;
-                                CountStepper = -1;
-                                LeadingZero = true;
                                 DisplayFormat = "%%D%% Nap, %%H%% Óra, %%M%% Perc";
                                 FinishMessage = "Aukció lezárva"  ;
                             </script>
                             <script src="<?=PROOT?>js/bids_timer.js"></script>
                         </p>
-                        <p><?= date_format(date_create($this->product->auction_end), "Y-m-d"); ?></p>
+                        <p style="margin-top: -10px; font-size: 13px"><?= date_format(date_create($this->product->auction_end), "Y-m-d"); ?></p>
                         <p><?= (!empty($this->bid)) ? $this->bid['bid_user'] : 'Még nem történt licitálás.' ?></p>
                         <p><?=sprintf("%d", $this->product->price)?> Ft</p>
                     </div>
@@ -104,7 +101,7 @@ use Core\Database;
             </div>
         </div>
         <div class="messages col-12 col-md-11">
-            <?= (isset($this->user)) ? '<button id="add-message">Kérdezek</button>' : '' ?> 
+            <?= (isset($this->user)) ? '<button id="add-message">Kérdezek</button>' : '' ?>
             <span id="msg-cancel"><i class="fal fa-times-circle " style="font-size: 30px; cursor: pointer;"></i></span>
             <div class="message_panel" id="message_panel">
                 <h4>Tedd fel kérdésed a termékkel kapcsolatban</h4>
@@ -115,7 +112,7 @@ use Core\Database;
 
                 <?php foreach($this->messages as $message) : ?>
                     <div class="mess">
-                        <h4 class="messages-info"><?= $message->username?> írta. Üzenet időpontja: <?=$message->create_date?></h4>
+                        <h4 class="messages-info"><?= $message->username?> írta. Üzenet időpontja: <?=$message->created_date?></h4>
                         <?= $message->message?>
                     </div>
                 <?php endforeach ?>

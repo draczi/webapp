@@ -18,7 +18,7 @@ use Core\H;
 class Users extends Model {
     protected static $_table='users';
     public static $currentLoggedInUser = null;
-    public $id,$username,$email,$password,$fname,$lname,$acl=1,$confirm, $login_date, $create_date;
+    public $id,$username,$email,$password,$fname,$lname,$acl=1,$confirm, $login_date, $created_date;
     public $address, $city, $state,$country, $zip_code, $phone, $mobile_phone, $producer_number, $tax_number;
     const blackListedFormKeys = ['id'];
 
@@ -34,19 +34,27 @@ class Users extends Model {
         if ($this->isNew()) {
             $this->runValidation(new UniqueValidator($this,['field'=>['username'],'msg'=>'Ez a felhasználónév foglalt.']));
             $this->runValidation(new UniqueValidator($this,['field'=>['email'],'msg'=>'Ez az e-mail cím már regisztrálva van.']));
+            $this->runValidation(new MatchesValidator($this,['field'=>'password','rule'=>$this->confirm,'msg'=>"A megadott jelszavak nem egyeznek."]));
+            $this->runValidation(new UniqueValidator($this,['field'=>['tax_number'],'msg'=>'Ez az adószám már szerepel az adatbázisban.']));
+            $this->runValidation(new UniqueValidator($this,['field'=>['producer_number'],'msg'=>'Ez az őstermelői igazolványszám már szerepel az adatbázisban.']));
         }
         $this->runValidation(new EmailValidator($this, ['field'=>'email','msg'=>'Nem megfelelő e-mail címet adtál meg.']));
         $this->runValidation(new MaxValidator($this,['field'=>'email','rule'=>150,'msg'=>'Az e-mail cím maximum 150 karaterből állhat.']));
         $this->runValidation(new MinValidator($this,['field'=>'username','rule'=>5,'msg'=>'A felhasználónév minimum 5 karakterből állhat.']));
         $this->runValidation(new MaxValidator($this,['field'=>'username','rule'=>150,'msg'=>'A felhasználónév maximum 5 karakterből állhat.']));
-
-        $this->runValidation(new MatchesValidator($this,['field'=>'password','rule'=>$this->confirm,'msg'=>"A megadott jelszavak nem egyeznek."]));
         $this->runValidation(new MinValidator($this,['field'=>'password','rule'=>5,'msg'=>'A jelszónak minimum 5 karakterből kell állnia.']));
-
+        if(isset(Users::findById($this->id)->producer_number) && Users::findById($this->id)->producer_number != $this->producer_number) {
+            $this->runValidation(new UniqueValidator($this,['field'=>['producer_number'],'msg'=>'Ez az őstermelői igazolványszám már szerepel az adatbázisban.']));
+        } else if (isset(Users::findById($this->id)->tax_number) && Users::findById($this->id)->tax_number != $this->tax_number ) {
+            $this->runValidation(new UniqueValidator($this,['field'=>['tax_number'],'msg'=>'Ez az adószám már szerepel az adatbázisban.']));
+        }
     }
+
     public function beforeSave(){
         $this->timeStamps();
-        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+        if($this->isNew() || $this->password != $user->password) {
+            $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+        }
     }
 
     public static function findByUsername($username) {
@@ -75,9 +83,6 @@ class Users extends Model {
 
     public function logout() {
         Session::delete(CURRENT_USER_SESSION_NAME);
-        if(Cookie::exists(REMEMBER_ME_COOKIE_NAME)) {
-            Cookie::delete(REMEMBER_ME_COOKIE_NAME);
-        }
         self::$currentLoggedInUser = null;
         return true;
     }
@@ -108,7 +113,7 @@ class Users extends Model {
         $db =self::getDb();
         $limit = (array_key_exists('limit', $options) && !empty($options['limit'])) ? $options['limit'] : 4;
         $offset = (array_key_exists('offset',$options) && !empty($options['offset']))? $options['offset'] : 0;
-        $where = 'create_date < NOW()';
+        $where = 'created_date < NOW()';
         $binds = [];
         if(array_key_exists('search',$options) && !empty($options['search'])) {
             $where .= " AND (users.username LIKE ? OR users.fname LIKE ? OR users.lname LIKE ?)";

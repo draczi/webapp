@@ -2,13 +2,15 @@
 namespace App\Controllers;
 use Core\Controller;
 use Core\H;
+use Core\Emails;
+use Core\Model;
 use App\Models\Users;
 use App\Models\Products;
 use App\Models\Binds;
 use App\Models\Categories;
 
 class HomeController extends Controller{
-    
+
     public function indexAction() {
         Products::closedAuctions();
         $search = $this->request->get('search');

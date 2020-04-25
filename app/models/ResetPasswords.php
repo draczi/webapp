@@ -6,7 +6,7 @@ use Core\Validators\EmailValidator;
 use Core\H;
 
 class ResetPasswords extends Model {
-  public $id, $token, $user_id, $email, $create_date;
+  public $id, $token, $user_id, $email;
   protected static $_table = 'reset_passwords';
 
   public function validator(){
@@ -18,6 +18,13 @@ class ResetPasswords extends Model {
       return self::findFirst([
           'conditions' => 'token = ?',
           'bind' => [$token]
+      ]);
+  }
+
+  public static function findByUserId($user_id) {
+      return self::findFirst([
+          'conditions' => 'user_id = ?',
+          'bind' => [$user_id]
       ]);
   }
 

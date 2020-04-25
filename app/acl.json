@@ -19,7 +19,8 @@
       "Register" : ["login", "register"]
     },
     "Register" : ["logout", "contact"],
-    "Products" : ["*"]
+    "Products" : ["*"],
+    "Bids" : ["add"]
   },
   "Administrator" : {
     "denied" : {
@@ -27,8 +28,7 @@
     },
     "Register" : ["logout", "contact"],
     "Bids" : ["add"],
-    "Admindashboard" : ["*"],
-    "Adminproduct" : ["*"],
+    "AdminProducts" : ["*"],
     "AdminCategories" : ["*"],
     "Adminbrands" : ["*"],
     "Products" : ["*"],

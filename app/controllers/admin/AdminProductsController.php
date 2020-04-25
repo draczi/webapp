@@ -12,7 +12,7 @@ use App\Models\Categories;
 use App\Models\Bids;
 
 
-class AdminproductController extends Controller {
+class AdminProductsController extends Controller {
 
     public function onConstruct() {
         $this->view->setLayout('admin');
@@ -44,8 +44,7 @@ class AdminproductController extends Controller {
         $this->view->vendorOptions = Products::getOptionVendor();
         $this->view->statusOptions = array('0' => 'Minden aukció', '-1' => 'Aktív', '1' => 'Inaktív');
         $this->view->users = $this->currentUser->id;
-        //$this->view->hasFilters = Products::hasFilters($options);
-        $this->view->render('admin/adminproduct/index');
+        $this->view->render('admin/adminProducts/index');
     }
 
     public function addAction() {
@@ -72,15 +71,15 @@ class AdminproductController extends Controller {
                 $structuredFiles = ProductImages::restructureFiles($files);
                 ProductImages::uploadProductImage($product->id,$structuredFiles);
                 Session::addMsg('success', 'Termék hozzáadva');
-                Router::redirect('adminproduct');
+                Router::redirect('adminProducts');
             }
         }
         $this->view->categories = Categories::getOptionForForm();
         $this->view->product = $product;
         $this->view->auction_time = $auction_time;
-        $this->view->formAction = PROOT . 'adminproduct/add';
+        $this->view->formAction = PROOT . 'adminProducts/add';
         $this->view->displayErrors = $product->getErrorMessages();
-        $this->view->render('admin/adminproduct/add');
+        $this->view->render('admin/adminProducts/add');
     }
 
     public function deleteAction(){
@@ -88,7 +87,13 @@ class AdminproductController extends Controller {
         if($this->request->isPost()){
             $id = $this->request->get('id');
             $product = Products::findAllById($id);
+            $bids = Bids::findProductBid($product->id);
+            if($bids && $product->auction_end > date('Y-m-d H:m:s')) {
+                 $resp = ['success' => false, 'msg' => 'A terméket nem lehet törölni, mert aktív és érvényes licit tartozik hozzá.','model_id' => $id];
+                 $this->jsonResponse($resp);
+            }
             if($product){
+                $bids->adminDelete();
                 ProductImages::deleteImages($id, $unlink = true);
                 $product->adminDelete();
                 $resp = ['success' => true, 'msg' => 'A termék törölve lett.','model_id' => $id];
@@ -126,7 +131,7 @@ class AdminproductController extends Controller {
                 }
                 ProductImages::updateSortByProductId($product->id, json_decode($_POST['images_sorted']));
                 Session::addMsg('success', 'Termékadatokat módosítottad.');
-                Router::redirect('adminproduct');
+                Router::redirect('adminProducts');
             }
         }
         $this->view->categories = Categories::getOptionForForm();;
@@ -134,7 +139,7 @@ class AdminproductController extends Controller {
         $this->view->product = $product;
         $this->view->auction_time = $auction_time;
         $this->view->displayErrors = $product->getErrorMessages();
-        $this->view->render('admin/adminproduct/edit');
+        $this->view->render('admin/adminProducts/edit');
     }
 
     function deleteImageAction(){

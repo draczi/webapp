@@ -17,7 +17,7 @@ class Input {
     return $this->getRequestMethod() === 'GET';
   }
 
-  public function getRequestMethod(){
+  public function getRequestMethod(){ 
     return strtoupper($_SERVER['REQUEST_METHOD']);
   }
 

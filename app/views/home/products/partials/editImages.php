@@ -1,33 +1,3 @@
-<style>
-  .edit-image-wrapper {
-    background-color: #eaeaea;
-    border-radius: 4px;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.25);
-    float: left;
-    margin-left: 12px;
-    position:relative;
-
-
-  }
-  .img {
-    height: 75px;
-    width : 100%;
-
-  }
-  .sortable-placeholder {
-    background-color: #eee;
-  }
-  .deleteButton {
-    position:absolute;
-    top: 8px;
-    right: 5px;
-    color: crimson;
-    cursor: pointer;
-  }
-  .deleteButton:hover {
-    color: #aa0000;
-  }
-</style>
 <div id="sortableImages" class="row align-items-center justify-content-start p-2">
       <?php foreach($this->images as $image) : ?>
         <div class="col flex-grow-0" style ="position:relative; margin-bottom: 20px;"id="image_<?=$image->id?>">
@@ -39,6 +9,7 @@
         </div>
       <?php endforeach; ?>
 </div>
+
 <script>
 function updateSort() {
   var sortedIDs = $("#sortableImages").sortable("toArray");
@@ -51,7 +22,7 @@ function deleteImage(id){
         url : '<?=PROOT?>products/deleteImage',
         method : "POST",
         data : {id : id},
-        success: function(resp){ 
+        success: function(resp){
             var msgType = (resp.success)? 'success' : 'danger';
             if(resp.success){
                 jQuery('#image_'+resp.model_id).remove();

@@ -332,10 +332,12 @@ class Model {
    */
   public function timeStamps(){
     $now = date('Y-m-d H:i:s');
-    $this->update_date = $now;
     if($this->isNew()){
-      $this->create_date = $now;
-  }
+      $this->created_date = $now;
+    } else {
+        $this->update_date = $now;
+    }
+    if(isset($this->login_date)) $this->login_date = $now;
   }
 
   /**

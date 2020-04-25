@@ -56,7 +56,7 @@ class AdminUsersController extends Controller {
         if($this->request->isPost()){
             $id = $this->request->get('id');
             $user = Users::findById($id);
-            $product = Products::findByUserId($user->id);
+            $product = Products::findByUserIdAndImages($user->id);
             $bids = Bids::findUserBid($user->id);
             if ($product || $bids) {
                 $resp = ['success' => false, 'msg' => 'a felhasználót nem lehet törölni.','model_id' => $id];

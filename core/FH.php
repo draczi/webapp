@@ -30,6 +30,17 @@ class FH {
     return $html;
   }
 
+  public static function labelBlock($label, $name,$inputAttrs=[],$divAttrs=[]){
+    $divString = self::stringifyAttrs($divAttrs);
+    $inputString = self::stringifyAttrs($inputAttrs);
+    $id = str_replace('[]','',$name);
+    $html = '<div' . $divString . '>';
+    $html .= '<label class="control-label" for="'.$id.'">'.$label.'</label>';
+    $html .= '<label '.$inputString.'>'.$name.'</label>';
+    $html .= '</div>';
+    return $html;
+  }
+
   /**
    * Creates a submit input
    * @method submitTag
@@ -166,7 +177,7 @@ class FH {
    * @return string        value of the token set in $_SESSION
    */
   public static function generateToken(){
-    $token = base64_encode(openssl_random_pseudo_bytes(32));
+    $token = base64_encode( (32));
     Session::set('csrf_token',$token);
     return $token;
   }

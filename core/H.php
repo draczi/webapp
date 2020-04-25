@@ -18,9 +18,4 @@ class H {
     }
     return $currentPage;
   }
-
-  public static function getObjectProperties($obj){
-    return get_object_vars($obj);
-  }
-
 }

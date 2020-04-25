@@ -2,6 +2,7 @@
 namespace App\Controllers;
 use Core\Controller;
 use Core\Model;
+use Core\Emails;
 use Core\Router;
 use App\Models\{Users,ResetPasswords,Contacts,Login};
 use Core\H;
@@ -117,22 +118,16 @@ class RegisterController extends Controller {
             if($resetPassModel->validationPassed()){
                 $user = Users::findByEmail($this->request->get('email'));
                 if($user) {
-                    $resetPassModel->token = $token = uniqid(md5(time())); // ez egy random token
+                    if($token = ResetPasswords::findByUserId($user->id)) $token->deleteToken($token->token);
+                    $resetPassModel->token = $token = uniqid(md5(time())); // random token
                     $resetPassModel->user_id = $user->id;
                     if($resetPassModel->save()){
-                        $to = $this->request->get('email');
-                        $subject = "Password reset link";
-                        $message = "<div style='width: 1000px;margin: 20px auto;'><h1 style='text-align:center'>Ez egy jelszó módosító email</h1><br><br><br>
-                        <table><h3>Amennyiben nem ön kérte a jelszó emlékeztetőt abban az esetben kérem tekintse tárgytalannak az emailünket.</h3><tr><td>Drácz István</td><td>istvan.dracz@gmail.com</td></tr><tr><td>Click <a href='https://dracz1.51.profitarhely.hu/register/passwordChange/".$token."'>Here</a> to reset your password.</td></tr></table></div>";
-                        $headers = "MIME-Version: 1.0". "\r\n";
-                        $headers .= "Content-type: text/html; charset=UTF-8" . "\r\n";
-                        $headers .= "From: <demo@demo.com" . "\r\n";
-                        mail($to, $subject, $message, $headers);
-                        Session::addMsg('success', 'Új jelszavát elküldtük emailben.');
+                        Emails::forgottenPasswordSablon($user->username, $user->email, $token);
+                        Session::addMsg('success', 'Jelszava módosításához szükséges linket elküldtük emailben.');
                         Router::redirect('register/login');
                     }
                 } else {
-                    $resetPassModel->addErrorMessage('email', 'Az email cím nem található az adatbázisban!');
+                    $resetPassModel->addErrorMessage('email', 'Az e-mail cím nem található az adatbázisban!');
                 }
             }
         }

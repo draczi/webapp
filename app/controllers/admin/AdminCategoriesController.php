@@ -42,6 +42,10 @@
 
     public function editAction($id) {
       $categories = Categories::findById((int)$id);
+      if($categories->parent == '') {
+          Session::addMsg('danger', 'Főkategória nem módosítható.');
+          Router::redirect('adminCategories');
+      }
       if($this->request->isPost()) {
         $this->request->csrfCheck();
         $categories->assign($this->request->get());

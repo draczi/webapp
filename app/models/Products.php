@@ -3,12 +3,13 @@ namespace App\Models;
 use Core\Model;
 use Core\Validators\{RequiredValidator,NumericValidator, NumMinValidator};
 use Core\H;
+use Core\Emails;
 
 class Products extends Model {
 
     public $id, $product_name, $description, $vendor, $category, $action_end, $quantity, $auction_time;
     public $status = 1, $sold = 0, $created_date, $update_date, $price, $bid_increment , $deleted= 0;
-    const blackList = ['id','deleted'];
+    const blackList = ['id','deleted', 'status', 'sold'];
     protected static $_table = "products";
     protected static $_softDelete = true;
 
@@ -37,14 +38,6 @@ class Products extends Model {
         $conditions = [
             'conditions' => "id = ? AND vendor = ?",
             'bind' => [(int)$id, (int)$user_id]
-        ];
-        return self::findFirst($conditions);
-    }
-
-    public static function findByUserId($user_id) {
-        $conditions = [
-            'conditions' => "vendor = ? AND deleted = 0",
-            'bind' => [(int)$user_id]
         ];
         return self::findFirst($conditions);
     }
@@ -104,17 +97,18 @@ class Products extends Model {
             $binds[] = $options['vendor'];
         }
 
-
         $select = "SELECT COUNT(*) as total";
         $sql = " FROM products
         JOIN product_images as pi
         ON products.id = pi.product_id
         JOIN categories
         ON products.category = categories.id
+        JOIN users
+        ON products.vendor = users.id
         WHERE {$where}
         ";
         $total = $db->query($select . $sql, $binds)->first()->total;
-        $select = "SELECT products.*, pi.url as url, categories.category_name as category";
+        $select = "SELECT products.*, pi.url as url, categories.category_name as category, users.username as username";
         $pager = " LIMIT ? OFFSET ?";
         $binds[] = $limit;
         $binds[] = $offset;
@@ -124,7 +118,7 @@ class Products extends Model {
 
     public static function auctionEndSold($user_id) {
         $db = self::getDb();
-        $sql = "SELECT products.*, product_images.url as url FROM products JOIN product_images ON products.id = product_images.product_id WHERE product_images.sort = 0 AND products.sold = 1 AND status = 0 AND products.vendor = " .$user_id;
+        $sql = "SELECT products.*, product_images.url as url, bids.bid_amount as bid_price, users.username as customer FROM products JOIN product_images ON products.id = product_images.product_id LEFT JOIN bids ON bids.product_id = products.id JOIN users ON users.id = bids.user_id WHERE product_images.sort = 0 AND products.sold = 1 AND status = 0 AND bids.deleted = 0 AND vendor = '".$user_id."'";
         return $db->query($sql)->results();
     }
 
@@ -148,26 +142,21 @@ class Products extends Model {
             'conditions' => 'status = 1 AND auction_end < NOW()'
         ]);
         foreach($products as $product) {
-             ($bid = Bids::findProductBid($product->id)) ? $product->sold = 1 : $product->sold;
-             if($bid) $inaktivProducts[] = array('product_id' => $product->id, 'customer' => $bid->user_id);
-             $product->status = 0;
-             $product->save();
+            ($bid = Bids::findProductBid($product->id)) ? $product->sold = 1 : $product->sold;
+            Emails::closedAuctionEmailSablon($product, Users::findById($product->vendor), $product->sold, (isset($bid)?$bid:''), ($bid)? Users::findById($bid->user_id) : 'NULL');
+            $product->status = 0;
+            $product->save();
         }
-        return $inaktivProducts;
     }
 
     public static function deleteProducts($user_id) {
-      $products = self::findAll([
-        'conditions' => "user_id",
-        'bind' => [$user_id]
-      ]);
-      foreach($products as $product) {
-        $product->delete();
-      }
-}
-
-
-
-
+        $products = self::findAll([
+            'conditions' => "user_id",
+            'bind' => [$user_id]
+        ]);
+        foreach($products as $product) {
+            $product->delete();
+        }
+    }
 
 }

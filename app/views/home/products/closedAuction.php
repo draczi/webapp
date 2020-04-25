@@ -7,26 +7,27 @@
   <?php foreach($this->solds as $sold) : ?>
   <div class="product-container row">
     <div class="product-img col-md-2"><img src="<?= PROOT.$sold->url ?>" /></div>
-    <div class="product-name col-md-5"><p class="name"></p><?= $sold->name ?><p class="desc"><?= substr($sold->description,0,strpos($sold->description, ' ', 30) );?> ... </p></div>
-    <div class="product-date col-md-2">Aukció kezdete<p class="start_date" style="margin: 0"><?= $sold->created_at ?></p>Aukció vége<p class="end_date" style="margin: 0"><?= $sold->auction_end ?></p></div>
-    <div class="product-price col-md-2">Kikiáltási ár<p class="price"><?= $sold->price ?> Ft</p>Aktuális ár<p class="actual_price"><?= $sold->min_price ?> Ft</p></div>
-    <div class="product-icons col-md-1">
-      </div>
+    <div class="product-name col-md-3"><p class="name"><?= $sold->product_name ?></p><p class="desc"><?= (strlen($sold->description) > 80 )? substr($sold->description, 0, 60) . '...' : $sold->description?></p><p>Termékkód: <?=$sold->id?></p></div>
+    <div class="product-name col-md-2"><p>Aukció kezdete</p><p style="margin-top: 30px;"><?= $sold->created_date ?></p></div>
+    <div class="product-name col-md-2"><p>Aukció vége</p><p style="margin-top: 30px;"><?= $sold->auction_end ?></p></div>
+    <div class="product-name col-md-2"><p>Nyertes ár</p><p style="margin-top: 30px; font-weight: bold"><?= $sold->bid_price ?></p></div>
+    <div class="product-icons col-md-1"><p>Nyertes</p><p style="margin-top: 30px; font-weight: bold"><?= $sold->customer ?></p></div></div>
   </div>
   <?php endforeach; ?>
   <?php if(empty($this->solds)) : ?>
      <p>Jelenleg nincs egyetlen eladott terméked se.</p>
    <?php endif ?>
-  <h3>El nem adott termékek</h3>
+  <h3 style="margin-top: 30px">El nem adott termékek</h3>
   <hr/>
   <?php foreach($this->noSolds as $noSold) : ?>
   <div class="product-container row">
     <div class="product-img col-md-2"><img src="<?= PROOT.$noSold->url ?>" /></div>
-    <div class="product-name col-md-5"><p class="name"></p><?= $noSold->name ?><p class="desc"><?= substr($noSold->description,0,strpos($noSold->description, ' ', 30) );?> ... </p></div>
-    <div class="product-date col-md-2">Aukció kezdete<p class="start_date" style="margin: 0"><?= $noSold->created_at ?></p>Aukció vége<p class="end_date" style="margin: 0"><?= $noSold->auction_end ?></p></div>
-    <div class="product-price col-md-2">Kikiáltási ár<p class="price"><?= $noSold->price ?> Ft</p>Aktuális ár<p class="actual_price"><?= $noSold->min_price ?> Ft</p></div>
+    <div class="product-name col-md-3"><p class="name"><?= $noSold->product_name ?></p><p class="desc"><?= (strlen($noSold->description) > 80 )? substr($noSold->description, 0, 60) . '...' : $noSold->description?></p><p>Termékkód: <?=$noSold->id?></p></div>
+    <div class="product-name col-md-2"><p>Aukció kezdete</p><p style="margin-top: 30px;"><?= $noSold->created_date ?></p></div>
+    <div class="product-name col-md-2"><p>Aukció vége</p><p style="margin-top: 30px;"><?= $noSold->auction_end ?></p></div>
+    <div class="product-name col-md-2"><p>Végleges ár</p><p style="margin-top: 30px; font-weight: bold"><?= $noSold->price ?></p></div>
     <div class="product-icons col-md-1">
-    </div>
+</div>
   </div>
   <?php endforeach; ?>
   <?php if(empty($this->noSolds)) : ?>

@@ -9,6 +9,11 @@ body {
   margin: 0 auto;
 }
 
+span.kotelezo {
+    font-size: 12px;
+    margin-bottom: 40px;
+}
+
 .form-errors {
   border-radius: 8px;
   margin: 10px 25px 45px 25px;
@@ -22,6 +27,10 @@ body {
 .form-errors li {
   list-style: none;
   font-size: 15px;
+}
+
+.dataLabel {
+    background-color: #e9ecef
 }
 
 nav {
@@ -271,7 +280,7 @@ ul.nav-tabs.search li a {
 .product-img img {
   width: 120px;
   height: 120px;
-  padding: 10px 10px
+  padding: 5px 10px 18px
 }
 .container a {
   text-decoration: none;
@@ -376,6 +385,36 @@ h4.redirect {
 
 #msg-cancel i {
     font-size: 20px;
+}
+
+/*Képek stitula*/
+.edit-image-wrapper {
+  background-color: #eaeaea;
+  border-radius: 4px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.25);
+  float: left;
+  margin-left: 12px;
+  position:relative;
+
+
+}
+.img {
+  height: 75px;
+  width : 100%;
+
+}
+.sortable-placeholder {
+  background-color: #eee;
+}
+span.deleteButton {
+  position:absolute;
+  top: 8px;
+  right: 5px;
+  color: crimson;
+  cursor: pointer;
+}
+span.deleteButton:hover {
+  color: #aa0000;
 }
 
 footer {

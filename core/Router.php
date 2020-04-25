@@ -31,7 +31,7 @@
       //params
       $queryParams = $url;
       $controller = (substr($controller, 0, 5) == 'Admin')? 'App\Controllers\Admin\\' . $controller : 'App\Controllers\\' . $controller;
-      $dispatch = new $controller($controller_name, $action);
+      $dispatch = new $controller($controller_name, $action); 
       if(method_exists($controller, $action)) {
         call_user_func_array([$dispatch, $action], $queryParams);
       } else {
@@ -105,7 +105,7 @@
             $menuAry[$key] = $finalVal;
           }
         }
-      }
+    }
       return $menuAry;
     }
 

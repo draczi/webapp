@@ -6,5 +6,5 @@
     "Lezártárverések" : "products/closedAuction"
 
  },
-  "Admin" : "admindashboard/index"
+  "Admin" : "adminProducts/index"
 }

@@ -18,7 +18,7 @@
         <td><?=$user->username?></td>
         <td><?=$user->email?></td>
         <td><?=$user->lname . ' ' .$user->fname?></td>
-        <td><?=$user->email?></td>
+        <td><?=$user->created_date?></td>
         <td><?=$user->login_date?></td>
         <td><?=AdminUsersController::szotar($user->acl)?></td>
         <td class="text-right" style="width: 70px">

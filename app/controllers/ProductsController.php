@@ -156,7 +156,7 @@
          $this->view->bid = $optionBid;
       }
       $vendor = Users::findById($product->vendor);
-      $optionVendor = ['vendor' => $vendor->username, 'login_date' => $vendor->login_date];
+      $optionVendor = ['vendor' => $vendor->username, 'login_date' => $vendor->login_date, 'created_date' => $vendor->created_date, 'city' => $vendor->city];
       $min_price = $product->price + $product->bid_increment;
 
      if(!$product) {

@@ -1,7 +1,7 @@
 {
   "Termékek" : {
-    "Termék megjelenítés" : "adminproduct/index",
-    "Új Termék" : "adminproduct/add"
+    "Termék megjelenítés" : "adminProducts/index",
+    "Új Termék" : "adminProducts/add"
   },
   "Kategória" : "adminCategories/index",
   "Felhasználók" : "adminUsers/index"
