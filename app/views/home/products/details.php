@@ -55,7 +55,7 @@ use Core\Database;
                 <p class="bid-increment">Licitlépcső: <span class="licit"><?=($this->product->bid_increment != 0)?$this->product->bid_increment : 'Nincs meghatározva'; ?></span> <span class="min_licit_price">( Minimum ajánlat:  <?= (empty($this->bid)) ? ($this->product->bid_increment != 0) ?  ($this->product->price + $this->product->bid_increment) : $this->product->price +1 : ($this->bid['bid'] + $this->product->bid_increment)  ?>  Ft  )</span></p>
                 <div>
                     <div id="bids">
-                        <?php  ($this->user) ? $this->partial('bids', 'form') :   print('<a href="<?=PROOT?>register/login" class="details-regist"><p style="color: #17a2b8; margin-top: 20px">A licitáláshoz kérlek jelentkezz be!</p></a>') ; ?>
+                        <?= ($this->user) ? $this->partial('bids', 'form') : '<a href="'.PROOT.'register/login" class="details-regist"><p style="color: #17a2b8; margin-top: 20px">A licitáláshoz kérlek jelentkezz be!</p></a>' ; ?>
 
                     </div>
                     <div class="lezarult" style="display:none"><b>AZ ÁRVERÉS BEFEJEZŐDÖTT!</b></div>

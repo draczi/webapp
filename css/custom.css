@@ -67,6 +67,10 @@ a.login-text {
     text-decoration: none;
 }
 
+a.dropdown-item.active {
+    background-color: #17a2b8;
+}
+
 .card {
   float: left;
   width: 350px;

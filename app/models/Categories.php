@@ -44,6 +44,7 @@
     public static function getOptionForForm() {
       $categories = self::find([
         'columns' => 'id, category_name',
+        'conditions' => 'parent is not null',
         'order' => 'category_name'
       ]);
       $categoriesAry = ['0' =>'Válasszon egy kategóriát'];

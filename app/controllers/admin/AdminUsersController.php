@@ -24,7 +24,7 @@ class AdminUsersController extends Controller {
         $search = $this->request->get('search');
         $acl = $this->request->get('acl');
         $page = (!empty($this->request->get('page'))) ? $this->request->get('page') : 1;
-        $limit = 6 ;
+        $limit = 15 ;
         $offset = ($page - 1) * $limit;
         $options = [
             'search'=>$search, 'acl' =>  $acl, 'limit' => $limit, 'offset' => $offset

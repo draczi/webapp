@@ -160,7 +160,7 @@
       $min_price = $product->price + $product->bid_increment;
 
      if(!$product) {
-       Session::addMsg('danger', "Ooops a Termék már elérhető! Valószínű lejárt az árverés.");
+       Session::addMsg('danger', "Ooops a Termék már nem elérhető! Valószínű lejárt az árverés.");
        Router::redirect('home');
      }
 

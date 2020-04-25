@@ -12,7 +12,7 @@
 
 <script>
 function updateSort() {
-  var sortedIDs = $("#sortableImages").sortable("toArray");
+  var sortedIDs = $("#sortableImages").sortable("toArray"); 
   $('#images_sorted').val(JSON.stringify(sortedIDs));
 }
 

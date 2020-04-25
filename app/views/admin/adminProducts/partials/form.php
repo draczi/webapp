@@ -10,7 +10,7 @@
   </div>
   <div class="row">
   <?= FH::inputBlock('text', 'Kikiáltási ár *', 'price', $this->product->price, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
-  <?= FH::inputBlock('text', 'Mennyiség *', 'quantity', $this->product->quantity, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
+  <?= FH::inputBlock('text', 'Mennyiség (kg) *', 'quantity', $this->product->quantity, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
   <?= FH::inputBlock('text', 'Licitlépcső', 'bid_increment', $this->product->bid_increment, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
   <?= FH::selectBlock('Aukció időtartalma *', 'auction_time', $this->product->auction_time, $this->auction_time,['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']) ?>
   </div>
