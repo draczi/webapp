@@ -27,9 +27,5 @@
   $url = isset($_SERVER['PATH_INFO']) ? explode('/', ltrim($_SERVER['PATH_INFO'], '/')) : []; // minden amit a gyökeren kívül beírunk.
   $db = Database::getInstance();
 
-  if(!Session::exists(CURRENT_USER_SESSION_NAME) && COOKIE::exists(REMEMBER_ME_COOKIE_NAME)) {
-    Users::loginUserFromCookie();
-  }
-
   // Route the request
   Router::route($url);
