@@ -9,7 +9,7 @@ class Products extends Model {
 
     public $id, $product_name, $description, $vendor, $category, $action_end, $quantity, $auction_time;
     public $status = 1, $sold = 0, $created_date, $update_date, $price, $bid_increment , $deleted= 0;
-    const blackList = ['id','deleted', 'status', 'sold'];
+    const blackList = ['id','deleted'];
     protected static $_table = "products";
     protected static $_softDelete = true;
 
@@ -105,7 +105,7 @@ class Products extends Model {
         ON products.category = categories.id
         JOIN users
         ON products.vendor = users.id
-        WHERE {$where}
+        WHERE {$where} ORDER BY products.id ASC
         ";
         $total = $db->query($select . $sql, $binds)->first()->total;
         $select = "SELECT products.*, pi.url as url, categories.category_name as category, users.username as username";
@@ -157,6 +157,12 @@ class Products extends Model {
         foreach($products as $product) {
             $product->delete();
         }
+    }
+
+    public static function archiveProducts() {
+        return self::findAll([
+            'conditions' => "auction_end < (NOW() - INTERVAL 180 DAY)"
+        ]);
     }
 
 }

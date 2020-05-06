@@ -24,7 +24,7 @@ use Core\FH;
             </div>
             <div class="row">
                 <?= FH::inputBlock('password','Jelszó *', 'password', "", ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-6'], $this->displayErrors); ?>
-                <?= FH::inputBlock('password','Jelszó * mégegyszer', 'confirm', "", ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-6'], $this->displayErrors); ?>
+                <?= FH::inputBlock('password','Jelszó mégegyszer *', 'confirm', "", ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-6'], $this->displayErrors); ?>
             </div>
             <div class="row">
                 <?= FH::inputBlock('text','Cím *', 'address', $this->user->address, ['class' => 'form-control'], ['class' => 'form-group col-md-12 '], $this->displayErrors); ?>

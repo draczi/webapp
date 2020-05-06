@@ -13,11 +13,12 @@ class HomeController extends Controller{
 
     public function indexAction() {
         Products::closedAuctions();
-        $search = $this->request->get('search');
-        $min_price = $this->request->get('min_price');
-        $max_price = $this->request->get('max_price');
-        $category = $this->request->get('category');
-        $page = (!empty($this->request->get('page'))) ? $this->request->get('page') : 1;
+
+        (!empty($_GET))?$search = $_GET['search'] : $search = '';
+        (!empty($_GET))?$min_price = $_GET['min_price'] : $min_price = '';
+        (!empty($_GET))?$max_price = $_GET['max_price'] : $max_price = '';
+        (!empty($_GET))?$category = $_GET['category'] : $category = '';
+        $page = (!empty($_GET['page'])) ? $_GET['page'] : 1;
         $limit = 6 ;
         $offset = ($page - 1) * $limit;
         $options = [

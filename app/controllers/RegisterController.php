@@ -26,6 +26,7 @@ class RegisterController extends Controller {
                 if($user && password_verify($this->request->get('password'), $user->password)) {
                     $user->belepesDate($user->id);
                     $user->login();
+                    if($user->acl == 3) Router::redirect('adminProducts');
                     Router::redirect('');
                 }  else {
                     $loginModel->addErrorMessage('username','A felhasználónév, jelszó páros nem megfelelő.');

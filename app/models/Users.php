@@ -38,6 +38,9 @@ class Users extends Model {
             $this->runValidation(new UniqueValidator($this,['field'=>['tax_number'],'msg'=>'Ez az adószám már szerepel az adatbázisban.']));
             $this->runValidation(new UniqueValidator($this,['field'=>['producer_number'],'msg'=>'Ez az őstermelői igazolványszám már szerepel az adatbázisban.']));
         }
+        if(Users::findById($this->id)->acl == 3) {
+            $this->runValidation(new MatchesValidator($this,['field'=>'password','rule'=> Users::findById($this->id)->acl,'msg'=>"A saját felhasználói jogköröd nem változtathatod meg."]));
+        }
         $this->runValidation(new EmailValidator($this, ['field'=>'email','msg'=>'Nem megfelelő e-mail címet adtál meg.']));
         $this->runValidation(new MaxValidator($this,['field'=>'email','rule'=>150,'msg'=>'Az e-mail cím maximum 150 karaterből állhat.']));
         $this->runValidation(new MinValidator($this,['field'=>'username','rule'=>5,'msg'=>'A felhasználónév minimum 5 karakterből állhat.']));

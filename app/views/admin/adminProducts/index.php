@@ -21,7 +21,6 @@
         <td><?=$product->auction_end?></td>
         <td class="text-right" style="width: 70px">
           <a href="<?=PROOT?>adminProducts/edit/<?=$product->id?>" ><span class="fa fa-edit" style="color: #17a2b8; margin-top: 14px;" ></span></a>
-          <a href="<?=PROOT?>adminProducts/delete/<?=$product->id?>" onclick="deleteProduct('<?=$product->id?>');return false;" ><span class="fa fa-trash-alt" style="color: red; margin-left: 5px"></span></a>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -57,7 +56,7 @@ function deleteProduct(id) {
     url : '<?=PROOT?>adminProducts/delete',
     method : "POST",
     data : {id : id},
-    success : function(resp) {
+    success : function(resp) { alert(resp);
       console.log(resp);
       var msgType = (resp.success)? 'success' : 'danger';
       if(resp.success) {

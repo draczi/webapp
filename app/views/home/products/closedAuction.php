@@ -7,7 +7,7 @@
   <?php foreach($this->solds as $sold) : ?>
   <div class="product-container row">
     <div class="product-img col-md-2"><img src="<?= PROOT.$sold->url ?>" /></div>
-    <div class="product-name col-md-3"><p class="name"><?= $sold->product_name ?></p><p class="desc"><?= (strlen($sold->description) > 80 )? substr($sold->description, 0, 60) . '...' : $sold->description?></p><p>Termékkód: <?=$sold->id?></p></div>
+    <div class="product-name col-md-3"><p class="name"><?= $sold->product_name ?></p><p class="desc"><?= (strlen($sold->description) > 60 )? substr($sold->description, 0, 40) . '...' : $sold->description?></p><p>Termékkód: <?=$sold->id?></p></div>
     <div class="product-name col-md-2"><p>Aukció kezdete</p><p style="margin-top: 30px;"><?= $sold->created_date ?></p></div>
     <div class="product-name col-md-2"><p>Aukció vége</p><p style="margin-top: 30px;"><?= $sold->auction_end ?></p></div>
     <div class="product-name col-md-2"><p>Nyertes ár</p><p style="margin-top: 30px; font-weight: bold"><?= $sold->bid_price ?></p></div>

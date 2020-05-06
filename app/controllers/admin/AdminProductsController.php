@@ -10,6 +10,7 @@ use App\Models\ProductImages;
 use App\Models\Users;
 use App\Models\Categories;
 use App\Models\Bids;
+use App\Models\Messages;
 
 
 class AdminProductsController extends Controller {
@@ -82,24 +83,20 @@ class AdminProductsController extends Controller {
         $this->view->render('admin/adminProducts/add');
     }
 
-    public function deleteAction(){
-        $resp = ['success'=>false,'msg'=>'Valami nincs rendben...'];
-        if($this->request->isPost()){
-            $id = $this->request->get('id');
-            $product = Products::findAllById($id);
-            $bids = Bids::findProductBid($product->id);
-            if($bids && $product->auction_end > date('Y-m-d H:m:s')) {
-                 $resp = ['success' => false, 'msg' => 'A terméket nem lehet törölni, mert aktív és érvényes licit tartozik hozzá.','model_id' => $id];
-                 $this->jsonResponse($resp);
-            }
-            if($product){
-                $bids->adminDelete();
-                ProductImages::deleteImages($id, $unlink = true);
+    public function products_archiveAction() {
+        if ($this->request->isPost()) {
+            foreach(Products::archiveProducts() as $product) {
                 $product->adminDelete();
-                $resp = ['success' => true, 'msg' => 'A termék törölve lett.','model_id' => $id];
             }
+            Session::addMsg('success', 'Termék archiválás sikeres végbement.');
+            Router::redirect('adminProducts');
         }
-        $this->jsonResponse($resp);
+
+        $this->view->products = Products::archiveProducts();
+        $this->view->categoryOptions = Categories::getOptionForForm();
+        $this->view->vendorOptions = Products::getOptionVendor();
+
+        $this->view->render('admin/adminProducts/products_archive');
     }
 
     public function editAction($id) {
