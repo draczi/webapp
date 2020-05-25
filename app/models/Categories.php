@@ -3,8 +3,6 @@
   namespace App\Models;
   use Core\Model;
   use Core\Validators\{RequiredValidator,UniqueValidator,NumMinValidator};
-  use Core\H;
-  use Core\Database;
 
   class Categories extends Model {
     public $id, $category_name, $parent = NULL;
@@ -12,12 +10,12 @@
 
     public function validator() {
       $this->runValidation(new RequiredValidator($this,['field' => 'category_name', 'msg' => 'Kérlek adj meg egy kategória nevet.']));
-      $this->runValidation(new UniqueValidator($this,['field' => ['category_name'],'msg' => 'Ez a kategória már létezik.']));
+      if($this->category_name != self::findById($this->id)->category_name) $this->runValidation(new UniqueValidator($this,['field' => ['category_name'],'msg' => 'Ez a kategória már létezik.']));
       $this->runValidation(new NumMinValidator($this,['field'=>'parent','rule'=>1,'msg'=>'Kérlek válassz egy kategóriát.']));
     }
 
     public static function allCategories() {
-      $db = Database::getInstance();
+      $db = self::getDb();
       return $db-> query("SELECT * FROM categories")->results();
     }
 

@@ -1,13 +1,7 @@
 <?php
 namespace App\Models;
 use Core\Model;
-use Core\Validators\RequiredValidator;
-use Core\Validators\EmailValidator;
-use Core\Validators\MinValidator;
-use Core\Validators\MaxValidator;
-use Core\Validators\MatchesValidator;
-use Core\Validators\UniqueValidator;
-use Core\H;
+use Core\Validators\{RequiredValidator,EmailValidator,MinValidator,MaxValidator,MatchesValidator,UniqueValidator};
 
 class Messages extends Model {
   public $message_id, $message, $product_id, $user_id;

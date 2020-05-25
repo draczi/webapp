@@ -1,5 +1,8 @@
 <?php
     use Core\FH;
+    $auction_end = new DateTime($this->product->auction_end);
+    $create = new DateTime($this->product->created_date);
+    $date = $create->diff($auction_end)->format("%a");
 ?>
 <form action="" method="POST" enctype="multipart/form-data">
     <?= FH::csrfInput()?>
@@ -12,11 +15,7 @@
         <?= FH::labelBlock('Kikiáltási ár *', $this->product->price, ['class' => 'form-control input-sm dataLabel'], ['class' => 'form-group col-md-3']); ?>
         <?= FH::labelBlock('Mennyiség (kg) *', $this->product->quantity, ['class' => 'form-control input-sm dataLabel'], ['class' => 'form-group col-md-3']); ?>
         <?= FH::inputBlock('text', 'Licitlépcső', 'bid_increment', $this->product->bid_increment, ['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']); ?>
-        <?php if ($this->product->created_date == date('Y-m-d')) { ?>
-            <?= FH::selectBlock('Aukció időtartalma *', 'auction_time', $this->product->auction_time, $this->auction_time,['class' => 'form-control input-sm'], ['class' => 'form-group col-md-3']) ?>
-        <?php } else { ?>
-            <?= FH::selectBlock('Aukció időtartalma *', 'auction_time', $this->product->auction_time, $this->auction_time,['class' => 'form-control input-sm', 'disabled' => 'true'], ['class' => 'form-group col-md-3'])?>
-        <?php } ?>
+        <?= FH::selectBlock('Aukció időtartalma *', 'auction_time', $date, $this->auction_time,['class' => 'form-control input-sm', 'disabled' => 'true'], ['class' => 'form-group col-md-3'])?>
     </div>
     <?= FH::selectBlock('Kategória *', 'category', $this->product->category, $this->categories,['class' => 'form-control input-sm'], ['class' => 'form-group']) ?>
     <?= FH::textareaBlock('Termékleírás *', 'description', $this->product->description, ['class'=> 'form-control', 'rows' => '6'], ['class' => "form-group"]); ?>
@@ -30,3 +29,4 @@
         <?= FH::submitTag('Módosítás', ['class' => 'btn btn-large btn-primary','style' => 'background-color: #17a2b8; border: none;']) ?>
     </div>
 </form>
+e

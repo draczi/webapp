@@ -1,9 +1,7 @@
 <?php
 namespace App\Models;
-use Core\Model;
+use Core\{Model,Emails};
 use Core\Validators\{RequiredValidator,NumericValidator, NumMinValidator};
-use Core\H;
-use Core\Emails;
 
 class Products extends Model {
 

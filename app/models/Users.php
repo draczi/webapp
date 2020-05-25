@@ -1,19 +1,9 @@
 <?php
 namespace App\Models;
-use Core\Model;
+use Core\{Model,Cookie,Session};
 use App\Models\Users;
-use App\Models\UserSessions;
-use Core\Cookie;
-use Core\Session;
-use Core\Database;;
-use Core\Validators\MinValidator;
-use Core\Validators\MaxValidator;
-use Core\Validators\RequiredValidator;
-use Core\Validators\EmailValidator;
-use Core\Validators\MatchesValidator;
-use Core\Validators\UniqueValidator;
+use Core\Validators\{MinValidator,MaxValidator,RequiredValidator,EmailValidator,MatchesValidator,UniqueValidator};
 use App\Controllers\Admin\AdminUsersController;
-use Core\H;
 
 class Users extends Model {
     protected static $_table='users';
@@ -38,7 +28,7 @@ class Users extends Model {
             $this->runValidation(new UniqueValidator($this,['field'=>['tax_number'],'msg'=>'Ez az adószám már szerepel az adatbázisban.']));
             $this->runValidation(new UniqueValidator($this,['field'=>['producer_number'],'msg'=>'Ez az őstermelői igazolványszám már szerepel az adatbázisban.']));
         }
-        if(Users::findById($this->id)->acl == 3) {
+        if(Users::findById($this->id)->acl == 3 && $this->id == self::currentUser()->id && $this->acl != self::currentUser()->acl) {
             $this->runValidation(new MatchesValidator($this,['field'=>'password','rule'=> Users::findById($this->id)->acl,'msg'=>"A saját felhasználói jogköröd nem változtathatod meg."]));
         }
         $this->runValidation(new EmailValidator($this, ['field'=>'email','msg'=>'Nem megfelelő e-mail címet adtál meg.']));
@@ -55,7 +45,7 @@ class Users extends Model {
 
     public function beforeSave(){
         $this->timeStamps();
-        if($this->isNew() || $this->password != $user->password) {
+        if($this->isNew() || $this->password != self::findById($this->id)->password) {
             $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         }
     }

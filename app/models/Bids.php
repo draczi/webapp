@@ -2,8 +2,6 @@
 namespace App\Models;
 use Core\Model;
 use Core\Validators\{RequiredValidator,NumericValidator,NumMinValidator,UniqueValidator,DontMatchesValidator,NumMaxValidator};
-use Core\H;
-
 
 class Bids extends Model {
 

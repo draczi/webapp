@@ -1,9 +1,7 @@
 <?php
 namespace App\Models;
 use Core\Model;
-use Core\Validators\RequiredValidator;
-use Core\Validators\EmailValidator;
-use Core\H;
+use Core\Validators\{RequiredValidator,EmailValidator};
 
 class ResetPasswords extends Model {
   public $id, $token, $user_id, $email;

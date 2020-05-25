@@ -18,8 +18,8 @@
 
   //email adatok
   define('EMAIL_PORT', 465);
-  define('EMAIL_HOST', 's47.profitarhely.hu');
-  define('EMAIL_USERNAME', 'it@mobilpalace.hu');
-  define('EMAIL_PASSWORD', 'Isyke1986');
-  define('EMAIL_SENDER', 'it@mobilpalace.hu');
+  define('EMAIL_HOST', 'draczi.hu');
+  define('EMAIL_USERNAME', 'aukciosportal@draczi.hu');
+  define('EMAIL_PASSWORD', '58]iTX~(umfH');
+  define('EMAIL_SENDER', 'aukciosportal@draczi.hu');
   define('SENDER_NAME', 'Mezőgazdasági Aukciós Portál');

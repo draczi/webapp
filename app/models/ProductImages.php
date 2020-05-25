@@ -1,7 +1,6 @@
 <?php
   namespace App\Models;
   use Core\Model;
-  use Core\H;
   use App\Models\Users;
 
   class ProductImages extends Model {

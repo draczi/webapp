@@ -46,7 +46,7 @@ class Emails {
 
     public static function closedAuctionEmailSablon($product, $vendor, $sold = 0, $bid = '', $customer = NULL) {
         if ($sold == 1) {
-            //customer email sablon
+            //vásárlói sablon
             $message = "";
             $message = "<html><body>";
             $message .= "<h1 style='color:#000;'>Tisztelt ".$customer->username."!</h1>";
@@ -69,7 +69,7 @@ class Emails {
             $message .= "</body></html>";
             self::sendEmail($customer->email, 'Megnyert árverés', $message);
 
-            //vendor email sablon
+            //eladói sablon
             $message = "";
             $message = "<html><body>";
             $message .= "<h1 style='color:#000;'>Tisztelt ".$vendor->username."!</h1>";
