@@ -6,6 +6,7 @@ use Core\Emails;
 use Core\Model;
 use App\Models\Users;
 use App\Models\Products;
+use App\Models\Search;
 use App\Models\Binds;
 use App\Models\Categories;
 
@@ -13,11 +14,14 @@ class HomeController extends Controller{
 
     public function indexAction() {
         Products::closedAuctions();
-
+        $search_price = new Search();
         (!empty($_GET))?$search = $_GET['search'] : $search = '';
         (!empty($_GET))?$min_price = $_GET['min_price'] : $min_price = '';
         (!empty($_GET))?$max_price = $_GET['max_price'] : $max_price = '';
         (!empty($_GET))?$category = $_GET['category'] : $category = '';
+        if(!empty($_GET['min_price']) && !empty($_GET['max_price']) && $_GET['min_price']>$_GET['max_price']) {
+            $search_price->addErrorMessage('min_price','A minimális ár nem lehet nagyobb mint a maximális ár!');
+        }
         $page = (!empty($_GET['page'])) ? $_GET['page'] : 1;
         $limit = 6 ;
         $offset = ($page - 1) * $limit;
@@ -34,6 +38,7 @@ class HomeController extends Controller{
         $this->view->max_price = $max_price;
         $this->view->category = $category;
         $this->view->search = $search;
+        $this->view->displayErrors = $search_price->getErrorMessages();
         $this->view->categoryOptions = Categories::getOptionForForm();
         $this->view->render('home/index');
     }
